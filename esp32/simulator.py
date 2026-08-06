@@ -19,7 +19,11 @@ except ImportError:
     subprocess.check_call([sys.executable, "-m", "pip", "install", "paho-mqtt"])
     import paho.mqtt.client as mqtt
 
-BROKER_HOST = os.environ.get("MQTT_BROKER_HOST", "localhost")
+if len(sys.argv) > 1:
+    BROKER_HOST = sys.argv[1]
+else:
+    BROKER_HOST = os.environ.get("MQTT_BROKER_HOST", "localhost")
+
 BROKER_PORT = int(os.environ.get("MQTT_BROKER_PORT", 1883))
 
 current_paper = {
@@ -45,10 +49,11 @@ def print_oled_screen(status="ONLINE"):
     print("|-------------------------------------------------------|")
     print("| [F] Button 1: FETCH NOW    | [S] Button 2: STAR PAPER |")
     print("+-------------------------------------------------------+")
-    print("\nCommands: Type 'f' + Enter to Fetch | 's' + Enter to Star | 'q' to Quit")
+    print(f"\nConnected to Broker: {BROKER_HOST}:{BROKER_PORT}")
+    print("Commands: Type 'f' + Enter to Fetch | 's' + Enter to Star | 'q' to Quit")
     print("> ", end="", flush=True)
 
-def on_connect(client, userdata, flags, rc):
+def on_connect(client, userdata, flags, rc, *args):
     if rc == 0:
         print_oled_screen("CONNECTED")
         client.subscribe("radar/paper/high_relevance")
@@ -97,7 +102,11 @@ def input_thread_func(client):
             sys.exit(0)
 
 def main():
-    client = mqtt.Client(client_id="esp32_terminal_simulator")
+    try:
+        client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_id="esp32_terminal_simulator")
+    except AttributeError:
+        client = mqtt.Client(client_id="esp32_terminal_simulator")
+
     client.on_connect = on_connect
     client.on_message = on_message
 
@@ -106,7 +115,7 @@ def main():
         client.connect(BROKER_HOST, BROKER_PORT, 60)
     except Exception as e:
         print(f"Failed to connect to MQTT broker ({BROKER_HOST}:{BROKER_PORT}): {e}")
-        print("Tip: Make sure Mosquitto broker container is running (docker compose up -d broker)")
+        print("Tip: Pass your server IP address: python esp32/simulator.py IP_AZURE_VM_ANDA")
 
     client.loop_start()
 
