@@ -60,6 +60,19 @@ func main() {
 		mqttC.PublishHighRelevanceAlert(paperID, title, score)
 	}
 
+	// Auto-fetch initial papers on backend startup if DB is empty
+	go func() {
+		time.Sleep(2 * time.Second)
+		stats, err := db.GetStats()
+		if err == nil {
+			if total, ok := stats["total"].(int); ok && total == 0 {
+				log.Println("[Startup] Database is empty. Performing initial arXiv paper fetch...")
+				kw := db.GetSetting("keywords", defaultKeywords)
+				scraper.FetchPapers(kw, 2)
+			}
+		}
+	}()
+
 	mqttC.OnFetchTriggered = func() {
 		log.Println("[MQTT Trigger] Fetching arXiv papers manually from ESP32 button press...")
 		kw := db.GetSetting("keywords", defaultKeywords)
