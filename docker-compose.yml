@@ -3,7 +3,7 @@ version: '3.8'
 services:
   cloudflared:
     image: cloudflare/cloudflared:latest
-    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TOKEN:-""}
+    command: tunnel --no-autoupdate --url http://nginx:80
     restart: unless-stopped
     deploy:
       resources:
