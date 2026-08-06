@@ -397,7 +397,7 @@ flowchart LR
 
     LocalCode -->|5. Flash Firmware via USB| PIO
     PIO --> WiFiMQTT
-    WiFiMQTT <-->|MQTT Protocol (Pub/Sub)| DockerProd
+    WiFiMQTT <-->|MQTT Protocol Pub-Sub| DockerProd
 ```
 
 #### Rincian Alur Kerja (Step-by-Step)
