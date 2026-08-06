@@ -74,16 +74,15 @@ Strict Rules:
             return self._generate_fallback(title, abstract)
 
     def _call_rest_api(self, prompt: str) -> str:
-        import httpx
+        import urllib.request
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{self.model_name}:generateContent?key={self.api_key}"
-        payload = {
+        payload = json.dumps({
             "contents": [{"parts": [{"text": prompt}]}]
-        }
+        }).encode("utf-8")
         headers = {"Content-Type": "application/json"}
-        with httpx.Client(timeout=30.0) as client:
-            resp = client.post(url, json=payload, headers=headers)
-            resp.raise_for_status()
-            data = resp.json()
+        req = urllib.request.Request(url, data=payload, headers=headers, method="POST")
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
             return data["candidates"][0]["content"]["parts"][0]["text"]
 
     def _clean_and_parse_json(self, raw_text: str) -> Dict[str, Any]:
