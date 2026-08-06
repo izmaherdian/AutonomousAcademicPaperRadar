@@ -108,7 +108,7 @@ func main() {
 	mux.HandleFunc("/api/v1/trigger-fetch", h.TriggerFetch)
 	mux.HandleFunc("/api/v1/stats", h.GetStats)
 	mux.HandleFunc("/api/v1/keywords", h.KeywordsHandler)
-	mux.HandleFunc("/ws", h.ServeWS)
+	mux.HandleFunc("/ws", hub.ServeWS)
 
 	// Healthcheck endpoint
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {

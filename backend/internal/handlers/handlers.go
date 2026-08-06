@@ -237,3 +237,8 @@ func (h *Handler) KeywordsHandler(w http.ResponseWriter, r *http.Request) {
 
 	JSONError(w, http.StatusMethodNotAllowed, "Method not allowed")
 }
+
+// WS /ws
+func (h *Handler) ServeWS(w http.ResponseWriter, r *http.Request) {
+	h.WSHub.ServeWS(w, r)
+}
