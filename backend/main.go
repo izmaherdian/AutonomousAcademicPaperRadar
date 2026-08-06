@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"paper-radar/backend/internal/arxiv"
 	"paper-radar/backend/internal/database"
@@ -64,12 +65,10 @@ func main() {
 	go func() {
 		time.Sleep(2 * time.Second)
 		stats, err := db.GetStats()
-		if err == nil {
-			if total, ok := stats["total"].(int); ok && total == 0 {
-				log.Println("[Startup] Database is empty. Performing initial arXiv paper fetch...")
-				kw := db.GetSetting("keywords", defaultKeywords)
-				scraper.FetchPapers(kw, 2)
-			}
+		if err == nil && stats.TotalCount == 0 {
+			log.Println("[Startup] Database is empty. Performing initial arXiv paper fetch...")
+			kw := db.GetSetting("keywords", defaultKeywords)
+			scraper.FetchPapers(kw, 2)
 		}
 	}()
 
