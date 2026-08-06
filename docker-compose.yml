@@ -48,7 +48,7 @@ services:
       - DEFAULT_KEYWORDS=${DEFAULT_KEYWORDS:-swarm robotics, decentralized control, drone vtol}
       - ARXIV_FETCH_INTERVAL=${ARXIV_FETCH_INTERVAL:-@every 6h}
     volumes:
-      - db_data:/data
+      - ./data:/data
     depends_on:
       - broker
       - ml-service
