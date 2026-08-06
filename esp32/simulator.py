@@ -109,7 +109,7 @@ def input_thread_func(client):
 
 def main():
     try:
-        client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, client_id="esp32_terminal_simulator")
+        client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, client_id="esp32_terminal_simulator")
     except AttributeError:
         client = mqtt.Client(client_id="esp32_terminal_simulator")
 
