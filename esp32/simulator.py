@@ -13,11 +13,17 @@ import threading
 try:
     import paho.mqtt.client as mqtt
 except ImportError:
-    print("[Simulator Error] 'paho-mqtt' library is not installed locally.")
-    print("Installing paho-mqtt via pip...")
-    import subprocess
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "paho-mqtt"])
-    import paho.mqtt.client as mqtt
+    print("[Simulator Notice] 'paho-mqtt' library is not installed.")
+    try:
+        import subprocess
+        print("Attempting automatic installation of paho-mqtt...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "paho-mqtt"])
+        import paho.mqtt.client as mqtt
+    except Exception:
+        print("\n[ERROR] Could not auto-install 'paho-mqtt'.")
+        print("Please install python3-pip on Ubuntu by running:")
+        print("  sudo apt update && sudo apt install -y python3-pip && pip install paho-mqtt\n")
+        sys.exit(1)
 
 if len(sys.argv) > 1:
     BROKER_HOST = sys.argv[1]
