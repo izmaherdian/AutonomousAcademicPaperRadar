@@ -15,7 +15,7 @@ import {
   updateKeywords
 } from './services/api';
 import { wsClient } from './services/websocket';
-import { Radar, AlertCircle } from 'lucide-react';
+import { Radar, AlertCircle, Sparkles, ChevronLeft, ChevronRight, Inbox } from 'lucide-react';
 
 export default function App() {
   const [papers, setPapers] = useState([]);
@@ -90,11 +90,11 @@ export default function App() {
       wsClient.on('NEW_PAPER', (paper) => {
         setPapers((prev) => [paper, ...prev]);
         loadStats();
-        if (paper.relevance_score >= 70) {
+        if (paper.relevance_score >= 80) {
           setLatestHighRelevancePaper({
             id: paper.id,
             title: paper.title,
-            score: paper.relevance_score
+            relevance_score: paper.relevance_score
           });
         }
       }),
@@ -170,33 +170,38 @@ export default function App() {
     }
   };
 
+  const totalPages = Math.ceil(total / 20) || 1;
+
   return (
-    <div className="min-h-screen bg-dark-900 text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-black">
-      {/* Header */}
+    <div className="min-h-screen bg-[#070a11] text-slate-100 flex flex-col font-sans selection:bg-cyan-500 selection:text-black">
+      
+      {/* Header Bar */}
       <Header
         isConnected={isConnected}
         isFetching={isFetching}
         onTriggerFetch={handleTriggerFetch}
+        onOpenKeywordsModal={() => setShowKeywordsModal(true)}
         onToggleESP32Widget={() => setShowESP32Widget(!showESP32Widget)}
         showESP32Widget={showESP32Widget}
       />
 
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-8">
-        {/* ESP32 Desk Assistant Widget Simulation */}
+        
+        {/* ESP32 Desk Assistant Widget */}
         {showESP32Widget && (
           <VirtualESP32Widget
             onClose={() => setShowESP32Widget(false)}
-            latestHighRelevancePaper={latestHighRelevancePaper}
-            onTriggerFetch={handleTriggerFetch}
-            onToggleStar={handleToggleStar}
+            latestPaper={latestHighRelevancePaper}
+            allPapers={papers}
+            onRefreshPapers={loadPapers}
           />
         )}
 
-        {/* Stats Overview Panel */}
+        {/* 4 Cards Stats Overview */}
         <StatsOverview stats={stats} />
 
-        {/* Search & Filter Bar */}
+        {/* Filter & Search Bar */}
         <FilterBar
           search={search}
           setSearch={setSearch}
@@ -204,56 +209,107 @@ export default function App() {
           setStarredOnly={setStarredOnly}
           minScore={minScore}
           setMinScore={setMinScore}
+          keywords={keywords}
           onOpenKeywordsModal={() => setShowKeywordsModal(true)}
         />
 
-        {/* Paper Feed */}
-        {isLoading ? (
-          <div className="py-20 text-center glass-card rounded-2xl">
-            <Radar className="w-10 h-10 text-cyan-400 animate-spin mx-auto mb-3" />
-            <p className="text-sm font-medium text-slate-300">Loading paper radar feed...</p>
+        {/* Paper List Content Section */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-bold text-slate-300 tracking-wide uppercase flex items-center space-x-2">
+              <span>Discovered Papers</span>
+              <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 text-xs font-mono">
+                {total}
+              </span>
+            </h2>
+
+            {isFetching && (
+              <div className="flex items-center space-x-2 text-cyan-400 text-xs animate-pulse">
+                <Sparkles className="w-4 h-4 animate-spin" />
+                <span>Scraping arXiv & Gemini AI Processing...</span>
+              </div>
+            )}
           </div>
-        ) : papers.length === 0 ? (
-          <div className="py-20 text-center glass-card rounded-2xl p-8">
-            <AlertCircle className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-            <h3 className="text-base font-bold text-white mb-1">No Papers Found</h3>
-            <p className="text-xs text-slate-400 max-w-md mx-auto mb-5">
-              No arXiv research papers matched your search criteria or minimum score filter ({minScore}).
-            </p>
-            <button
-              onClick={handleTriggerFetch}
-              className="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs transition-all shadow-lg shadow-cyan-500/20 inline-flex items-center space-x-2"
-            >
-              <Radar className="w-4 h-4" />
-              <span>Fetch Papers from arXiv</span>
-            </button>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {papers.map((paper) => (
+
+          {/* Loading Skeleton */}
+          {isLoading ? (
+            <div className="space-y-4">
+              {[1, 2, 3].map((n) => (
+                <div key={n} className="glass-card p-6 rounded-2xl animate-pulse space-y-3">
+                  <div className="h-4 bg-slate-800 rounded w-1/4"></div>
+                  <div className="h-6 bg-slate-800 rounded w-3/4"></div>
+                  <div className="h-16 bg-slate-800 rounded w-full"></div>
+                </div>
+              ))}
+            </div>
+          ) : papers.length > 0 ? (
+            /* Paper Cards List */
+            papers.map((paper) => (
               <PaperCard
                 key={paper.id}
                 paper={paper}
                 onToggleStar={handleToggleStar}
                 onToggleRead={handleToggleRead}
               />
-            ))}
+            ))
+          ) : (
+            /* Empty State */
+            <div className="glass-panel p-12 rounded-2xl text-center flex flex-col items-center justify-center border border-slate-800/80">
+              <div className="p-4 rounded-2xl bg-slate-800/60 text-slate-400 mb-3 border border-slate-700/50">
+                <Inbox className="w-8 h-8 text-cyan-400" />
+              </div>
+              <h3 className="text-base font-bold text-white mb-1">No Papers Found</h3>
+              <p className="text-xs text-slate-400 max-w-sm mb-4">
+                Try adjusting your search terms, minimum relevance score slider, or click Trigger Fetch to scrape arXiv papers.
+              </p>
+              <button
+                onClick={handleTriggerFetch}
+                className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs shadow-lg shadow-cyan-500/20 transition-all"
+              >
+                Trigger arXiv Fetch
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Pagination Bar */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between mt-8 pt-4 border-t border-slate-800/60">
+            <span className="text-xs text-slate-400">
+              Page <strong className="text-white font-mono">{page}</strong> of <strong className="text-white font-mono">{totalPages}</strong>
+            </span>
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 disabled:opacity-40 transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+                className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 disabled:opacity-40 transition-colors"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="glass-panel border-t border-slate-800 py-4 text-center text-xs text-slate-500">
-        Autonomous Academic Paper Radar &copy; 2026. Built with Go, React, Python FastAPI & Google Gemini API.
-      </footer>
-
-      {/* Keywords Management Modal */}
+      {/* Keywords Modal */}
       <KeywordModal
         isOpen={showKeywordsModal}
         onClose={() => setShowKeywordsModal(false)}
         currentKeywords={keywords}
         onSaveKeywords={handleSaveKeywords}
       />
+
+      {/* Footer */}
+      <footer className="w-full border-t border-slate-800/60 py-6 mt-12 text-center text-xs text-slate-500 font-mono">
+        Autonomous Academic Paper Radar &copy; 2026 &bull; Go Backend &bull; Python Gemini AI &bull; ESP32 MQTT &bull; NGINX Docker
+      </footer>
     </div>
   );
 }
