@@ -178,7 +178,7 @@ func (h *Handler) TriggerFetch(w http.ResponseWriter, r *http.Request) {
 	h.WSHub.Broadcast("FETCH_STARTED", map[string]string{"keywords": body.Keywords})
 
 	go func(kw string) {
-		count, err := h.Scraper.FetchPapers(kw, 15)
+		count, err := h.Scraper.FetchPapers(kw, 2)
 		status := "completed"
 		if err != nil {
 			status = "failed"

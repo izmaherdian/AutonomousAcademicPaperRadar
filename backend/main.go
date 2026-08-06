@@ -63,7 +63,7 @@ func main() {
 	mqttC.OnFetchTriggered = func() {
 		log.Println("[MQTT Trigger] Fetching arXiv papers manually from ESP32 button press...")
 		kw := db.GetSetting("keywords", defaultKeywords)
-		scraper.FetchPapers(kw, 15)
+		scraper.FetchPapers(kw, 2)
 	}
 
 	mqttC.OnStarTriggered = func(paperID string) {
@@ -80,7 +80,7 @@ func main() {
 	_, err = c.AddFunc(cronInterval, func() {
 		log.Println("[Cron Scheduler] Running periodic arXiv paper scraping job...")
 		kw := db.GetSetting("keywords", defaultKeywords)
-		scraper.FetchPapers(kw, 15)
+		scraper.FetchPapers(kw, 2)
 	})
 	if err != nil {
 		log.Printf("[Cron Scheduler] Error scheduling cron job (%s): %v", cronInterval, err)

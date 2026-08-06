@@ -160,8 +160,14 @@ export default function App() {
   };
 
   const handleSaveKeywords = async (newKeywords) => {
-    await updateKeywords(newKeywords);
-    setKeywords(newKeywords);
+    try {
+      await updateKeywords(newKeywords);
+      setKeywords(newKeywords);
+      await triggerArxivFetch(newKeywords);
+      setIsFetching(true);
+    } catch (err) {
+      console.error('Failed to update keywords:', err);
+    }
   };
 
   return (
