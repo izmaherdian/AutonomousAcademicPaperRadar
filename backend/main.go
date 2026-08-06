@@ -65,7 +65,7 @@ func main() {
 	go func() {
 		time.Sleep(2 * time.Second)
 		stats, err := db.GetStats()
-		if err == nil && stats.TotalCount == 0 {
+		if err == nil && stats.TotalPapers == 0 {
 			log.Println("[Startup] Database is empty. Performing initial arXiv paper fetch...")
 			kw := db.GetSetting("keywords", defaultKeywords)
 			scraper.FetchPapers(kw, 2)
