@@ -1,0 +1,26 @@
+# Environment & Secrets
+.env
+.env.local
+
+# Databases & Data Volumes
+*.db
+*.sqlite
+data/
+db_data/
+
+# Dependencies & Build artifacts
+node_modules/
+dist/
+build/
+backend/backend
+__pycache__/
+*.pyc
+.venv/
+venv/
+.idea/
+.vscode/
+
+# PlatformIO / ESP32 build
+.pio/
+.pioenvs/
+.piolibdeps/
