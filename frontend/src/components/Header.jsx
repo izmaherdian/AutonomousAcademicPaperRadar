@@ -1,5 +1,5 @@
 import React from 'react';
-import { Radar, RefreshCw, Cpu, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { Radar, RefreshCw, Cpu } from 'lucide-react';
 
 export default function Header({
   isConnected,
@@ -14,7 +14,7 @@ export default function Header({
 
         {/* Brand Logo & Title */}
         <div className="flex items-center space-x-3">
-          <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-500 to-emerald-500 shadow-sm">
+          <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-emerald-500 shadow-2xs">
             <Radar className="w-5 h-5 text-white animate-spin-slow" />
             <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span>
@@ -25,7 +25,7 @@ export default function Header({
           <div>
             <h1 className="text-base font-extrabold tracking-tight text-slate-800">
               Academic Paper{' '}
-              <span className="bg-gradient-to-r from-blue-600 to-emerald-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">
                 Radar
               </span>
             </h1>
@@ -35,11 +35,11 @@ export default function Header({
           </div>
         </div>
 
-        {/* Right Action Tools */}
+        {/* Action Tools */}
         <div className="flex items-center space-x-2.5">
 
-          {/* Live WS Connection Status */}
-          <div className={`hidden md:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium border ${
+          {/* Live WS Status */}
+          <div className={`hidden md:flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-medium border ${
             isConnected
               ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
               : 'bg-amber-50 text-amber-700 border-amber-200'
@@ -48,12 +48,12 @@ export default function Header({
             <span>{isConnected ? 'Live' : 'Reconnecting...'}</span>
           </div>
 
-          {/* ESP32 Virtual Widget Toggle */}
+          {/* ESP32 Toggle */}
           <button
             onClick={onToggleESP32Widget}
-            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all ${
               showESP32Widget
-                ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                ? 'bg-slate-900 text-white border-slate-900 shadow-2xs'
                 : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
             }`}
             title="Toggle Virtual ESP32 Hardware Widget"
@@ -67,7 +67,7 @@ export default function Header({
             onClick={onTriggerFetch}
             disabled={isFetching}
             id="trigger-fetch-btn"
-            className="flex items-center space-x-2 px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-all shadow-sm shadow-blue-600/20 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex items-center space-x-2 px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition-all shadow-2xs active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isFetching ? 'animate-spin' : ''}`} />
             <span>{isFetching ? 'Fetching...' : 'Fetch Papers'}</span>

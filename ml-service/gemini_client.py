@@ -8,9 +8,6 @@ logger = logging.getLogger("gemini_client")
 logging.basicConfig(level=logging.INFO)
 
 # ─── Reference paper context for relevance scoring ───────────────────────────
-# User's paper: "Decentralized formation control for swarm quadcopters using
-# improved artificial potential field & event-based reconfiguration control"
-# DOI: 10.1007/s44444-026-00111-4
 PAPER_CONTEXT = """
 This is an S2 thesis paper on:
 - Swarm UAVs / Quadcopters (multi-robot aerial systems)
@@ -26,7 +23,6 @@ This is an S2 thesis paper on:
 """
 
 # Weighted scoring parameters (1–100 scale)
-# Sum of all max weights = 100
 SCORING_RUBRIC = """
 SCORING RUBRIC (total 1–100, be precise — use any integer, e.g. 53, 78, 31):
 
@@ -47,7 +43,7 @@ Methodological Overlap (max 15 pts):
   +5  pts: Paper involves real-time / embedded / onboard controller
   +5  pts: Paper involves ROS / Gazebo / MATLAB simulation of aerial robots
 
-Broad Relevance (max 10 pts — for papers that are related but not direct matches):
+Broad Relevance (max 10 pts):
   +4  pts: Abstract mentions autonomous systems / autonomous aerial vehicles
   +3  pts: Abstract mentions swarm intelligence / bio-inspired algorithms
   +3  pts: Abstract mentions control systems / nonlinear control / robust control for robots
@@ -58,9 +54,6 @@ Deductions:
   -10 pts: Paper topic is completely unrelated (e.g. medical, finance, NLP-only)
 
 IMPORTANT: Give an exact integer score from 1 to 100. Do NOT round to 10/25/50/75.
-A paper about swarm UAV formation with APF should score 85–100.
-A paper about multi-agent systems without UAV focus should score 40–65.
-A paper about control theory with no robotics should score 10–25.
 """
 
 
@@ -81,13 +74,14 @@ class GeminiSummarizer:
     def summarize_paper(self, arxiv_id: str, title: str, abstract: str) -> Dict[str, Any]:
         """
         Summarizes an academic paper using Google Gemini API.
-        Returns Indonesian summary (3-5 paragraphs), granular relevance_score (1-100), and topic tags.
+        Returns Indonesian summary (3-4 paragraphs) with BOLD key terms (**istilah penting**),
+        granular relevance_score (1-100), and topic tags.
         """
         if not self.api_key:
             logger.warning("GEMINI_API_KEY not set. Using rule-based fallback summary.")
             return self._generate_fallback(title, abstract)
 
-        prompt = f"""Kamu adalah seorang reviewer paper akademik senior yang ahli dalam sistem kontrol, robotika swarm, UAV, dan sistem multi-agen. Tugas kamu adalah menganalisis paper berikut dan memberikan ringkasan MENARIK dalam BAHASA INDONESIA yang membuat pembaca ingin membaca paper tersebut secara lengkap.
+        prompt = f"""Kamu adalah seorang reviewer paper akademik senior yang ahli dalam sistem kontrol, robotika swarm, UAV, dan sistem multi-agen. Tugas kamu adalah menganalisis paper berikut dan memberikan ringkasan MENARIK dan KALEM dalam BAHASA INDONESIA yang membuat pembaca ingin membaca paper tersebut secara lengkap.
 
 KONTEKS PAPER REFERENSI:
 {PAPER_CONTEXT}
@@ -101,17 +95,17 @@ Abstrak: {abstract}
 
 FORMAT OUTPUT (HARUS JSON VALID):
 {{
-  "summary_ai": "PARAGRAF 1: Awali dengan kalimat pembuka yang menarik — jelaskan masalah utama yang dihadapi penelitian ini, mengapa masalah ini penting dan menantang secara teknis. Buat pembaca merasa 'oh ini relevan!'. PARAGRAF 2: Jelaskan pendekatan/metode yang diusulkan oleh peneliti dengan bahasa yang antusias — apa yang unik dan berbeda dari solusi yang ada sebelumnya? PARAGRAF 3: Sampaikan hasil-hasil kunci dan pencapaian yang dicapai — berikan angka/metrik jika ada di abstrak. PARAGRAF 4 (opsional): Jelaskan mengapa paper ini penting untuk dibaca dan apa kontribusinya ke bidang penelitian swarm UAV/formation control. Pisahkan setiap paragraf dengan karakter \\n\\n.",
+  "summary_ai": "PARAGRAF 1: Awali dengan masalah utama yang dihadapi penelitian ini. Gunakan format **bold** pada kata kunci/metode utama (contoh: **swarm UAV**, **kontroI terdesentralisasi**, atau **pembelajaran terdistribusi**). PARAGRAF 2: Jelaskan pendekatan/metode unik yang diusulkan oleh peneliti secara antusias dan jelas. Gunakan format **bold** untuk istilah teknis kunci (contoh: **Artificial Potential Field (APF)**, **Event-Based Control**, atau **stabilitas Lyapunov**). PARAGRAF 3: Sampaikan hasil-hasil utama dan metrik yang dicapai (contoh: **efisiensi 90%**, **waktu konvergensi lebih cepat**). PARAGRAF 4 (opsional): Ringkas kontribusi utama paper ini terhadap bidang robotika/kontrol. Pisahkan setiap paragraf dengan \\n\\n.",
   "relevance_score": <integer 1-100, ikuti rubrik penilaian di atas dengan tepat>,
   "tags": ["#tag1", "#tag2", "#tag3", "#tag4"]
 }}
 
 ATURAN KETAT:
 - Kembalikan HANYA JSON mentah (tanpa markdown code block seperti ```json).
-- summary_ai HARUS dalam BAHASA INDONESIA, menarik, dan mengundang rasa ingin tahu.
+- summary_ai HARUS dalam BAHASA INDONESIA, menarik, dan menggunakan sintaks **bold** pada 3-6 kata/frasa kunci paling penting per paragraf.
 - summary_ai harus 3–4 paragraf, dipisahkan dengan \\n\\n, total minimal 200 kata.
-- relevance_score HARUS integer tepat 1-100 sesuai rubrik, bukan pembulatan ke 10/25/50/75.
-- tags harus 3–5 hashtag yang SPESIFIK mencerminkan topik paper (contoh: #swarm-uav, #formation-control, #artificial-potential-field, #decentralized-control, #event-based-control). JANGAN gunakan tag generik seperti #arxiv atau #research.
+- relevance_score HARUS integer tepat 1-100 sesuai rubrik.
+- tags harus 3–5 hashtag yang SPESIFIK mencerminkan topik paper (contoh: #swarm-uav, #formation-control, #artificial-potential-field, #decentralized-control).
 """
 
         try:
@@ -158,18 +152,16 @@ ATURAN KETAT:
             score = int(data.get("relevance_score", 50))
             tags = data.get("tags", [])
 
-            # Clamp score between 1 and 100
             score = max(1, min(100, score))
 
             if not isinstance(tags, list):
                 tags = ["#swarm-robotics", "#control-systems"]
-            # Ensure hashtag prefix and filter generic tags
+
             processed_tags = []
             for t in tags[:5]:
                 t = t.strip()
                 if not t.startswith("#"):
                     t = f"#{t}"
-                # Reject purely generic tags
                 if t.lower() not in ["#arxiv", "#research", "#paper", "#academic"]:
                     processed_tags.append(t)
             if not processed_tags:
@@ -186,13 +178,13 @@ ATURAN KETAT:
         return None
 
     def _generate_fallback(self, title: str, abstract: str) -> Dict[str, Any]:
-        """Rule-based fallback with granular 1-100 scoring matching paper topics."""
+        """Rule-based fallback with granular 1-100 scoring and bolding matching paper topics."""
         sentences = [s.strip() for s in re.split(r'(?<=[.!?]) +', abstract) if s.strip()]
         if len(sentences) >= 3:
             summary_ai = (
-                f"Paper ini membahas tentang: {sentences[0]} "
-                f"{sentences[1]} "
-                f"Secara umum, {sentences[-1]}"
+                f"Paper ini membahas tentang **{sentences[0]}**.\n\n"
+                f"Pendekatan yang digunakan berfokus pada **{sentences[1]}**.\n\n"
+                f"Secara umum, kontribusi utama penelitian ini adalah **{sentences[-1]}**."
             )
         elif sentences:
             summary_ai = " ".join(sentences)
@@ -201,10 +193,8 @@ ATURAN KETAT:
 
         title_abs = (title + " " + abstract).lower()
 
-        # Granular scoring based on paper reference topics
-        score = 5  # base
+        score = 5
 
-        # Primary topics (high weight)
         primary = {
             "swarm uav": 15, "swarm quadcopter": 15, "multi-uav": 15, "drone swarm": 15,
             "uav swarm": 15, "formation control": 10, "formation flying": 10,
@@ -215,7 +205,6 @@ ATURAN KETAT:
             if kw in title_abs:
                 score += w
 
-        # Secondary topics
         secondary = {
             "event-based": 8, "event-triggered": 8, "multi-agent": 7,
             "consensus": 7, "obstacle avoidance": 7, "collision avoidance": 6,
@@ -225,7 +214,6 @@ ATURAN KETAT:
             if kw in title_abs:
                 score += w
 
-        # Methodological
         methods = {
             "lyapunov": 5, "real-time": 4, "embedded": 3,
             "ros": 4, "gazebo": 4, "matlab": 3,
@@ -235,7 +223,6 @@ ATURAN KETAT:
             if kw in title_abs:
                 score += w
 
-        # Broad relevance
         broad = {
             "autonomous": 3, "swarm intelligence": 3, "bio-inspired": 2,
             "nonlinear control": 2, "robust control": 2,
@@ -246,7 +233,6 @@ ATURAN KETAT:
 
         score = max(1, min(98, score))
 
-        # Generate meaningful tags
         tags = []
         if any(k in title_abs for k in ["uav", "quadcopter", "drone", "aerial"]):
             tags.append("#swarm-uav")

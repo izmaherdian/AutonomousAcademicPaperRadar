@@ -9,10 +9,9 @@ export default function StatsOverview({ stats = {} }) {
       title: 'Total Papers',
       value: stats.total_papers ?? 0,
       icon: FileText,
-      accent: 'from-blue-500 to-blue-600',
-      iconBg: 'bg-blue-50 border-blue-100',
-      iconColor: 'text-blue-600',
-      textColor: 'text-blue-600',
+      accent: 'from-indigo-500 to-blue-500',
+      iconBg: 'bg-indigo-50 border-indigo-100',
+      iconColor: 'text-indigo-600',
     },
     {
       title: 'Avg Relevansi',
@@ -21,7 +20,6 @@ export default function StatsOverview({ stats = {} }) {
       accent: 'from-emerald-500 to-teal-500',
       iconBg: 'bg-emerald-50 border-emerald-100',
       iconColor: 'text-emerald-600',
-      textColor: 'text-emerald-600',
     },
     {
       title: 'Belum Dibaca',
@@ -30,7 +28,6 @@ export default function StatsOverview({ stats = {} }) {
       accent: 'from-violet-500 to-purple-500',
       iconBg: 'bg-violet-50 border-violet-100',
       iconColor: 'text-violet-600',
-      textColor: 'text-violet-600',
     },
     {
       title: 'Starred',
@@ -39,34 +36,33 @@ export default function StatsOverview({ stats = {} }) {
       accent: 'from-amber-400 to-orange-500',
       iconBg: 'bg-amber-50 border-amber-100',
       iconColor: 'text-amber-500',
-      textColor: 'text-amber-500',
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 mb-6">
       {cards.map((card, idx) => {
         const Icon = card.icon;
         return (
           <div
             key={idx}
-            className="glass-card p-4 rounded-xl relative overflow-hidden group border border-slate-200/80 hover:shadow-md transition-all"
+            className="glass-card p-4 rounded-2xl relative overflow-hidden group border border-slate-200/80 hover:shadow-md transition-all"
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[11px] font-semibold text-slate-400 tracking-wide uppercase mb-1">
+                <p className="text-[11px] font-bold text-slate-400 tracking-wider uppercase mb-1">
                   {card.title}
                 </p>
-                <h3 className="text-2xl font-extrabold text-slate-800 tracking-tight">
+                <h3 className="text-2xl font-extrabold text-slate-800 tracking-tight font-sans">
                   {card.value}
                 </h3>
               </div>
-              <div className={`p-2.5 rounded-xl border ${card.iconBg} transition-transform group-hover:scale-110 duration-300`}>
+              <div className={`p-2.5 rounded-xl border ${card.iconBg} transition-transform group-hover:scale-105 duration-300`}>
                 <Icon className={`w-5 h-5 ${card.iconColor}`} />
               </div>
             </div>
-            {/* Accent bottom bar */}
-            <div className={`absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r ${card.accent} opacity-40 group-hover:opacity-100 transition-opacity duration-300`} />
+            {/* Subtle accent bar */}
+            <div className={`absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r ${card.accent} opacity-30 group-hover:opacity-100 transition-opacity duration-300`} />
           </div>
         );
       })}
