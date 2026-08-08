@@ -1,28 +1,28 @@
 import React from 'react';
 import { ArrowUpRight, Radar, Cpu, Brain, Sparkles, CheckCircle2, ChevronRight, Play, Compass, ArrowRight } from 'lucide-react';
 
-export default function SquarespaceLanding({ onLaunchApp }) {
+export default function LandingShowcase({ onLaunchApp }) {
   return (
     <div className="min-h-screen bg-[#fcfbf9] text-slate-900 font-sans selection:bg-slate-900 selection:text-white">
 
-      {/* ─── 1. Squarespace Minimalist Navigation ─────────────────────────── */}
+      {/* ─── 1. Minimalist Navigation ─────────────────────────────────────── */}
       <header className="sticky top-0 z-50 w-full glass-panel border-b border-slate-900/10 transition-all">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
 
-          {/* Left: Squarespace-style Typography Logo */}
+          {/* Left: Typography Logo */}
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center text-white">
+            <div className="w-8 h-8 rounded-full bg-slate-950 flex items-center justify-center text-white">
               <Radar className="w-4 h-4 animate-spin-slow" />
             </div>
             <span className="font-serif-header text-2xl font-bold tracking-tight text-slate-950">
-              SQUARESPACE <span className="font-sans font-light text-xs tracking-widest text-slate-500 uppercase">/ RADAR</span>
+              ACADEMIC RADAR <span className="font-sans font-light text-xs tracking-widest text-slate-500 uppercase">/ IZMAHERDIAN</span>
             </span>
           </div>
 
           {/* Middle: Clean Links */}
           <nav className="hidden md:flex items-center space-x-9 text-xs font-semibold tracking-wider text-slate-600 uppercase font-mono">
             <a href="#hero" className="hover:text-slate-950 transition-colors">Overview</a>
-            <a href="#templates" className="hover:text-slate-950 transition-colors">Features</a>
+            <a href="#templates" className="hover:text-slate-950 transition-colors">Capabilities</a>
             <a href="#architecture" className="hover:text-slate-950 transition-colors">Stack</a>
             <a href="#paper" className="hover:text-slate-950 transition-colors">S2 Research</a>
           </nav>
@@ -31,9 +31,9 @@ export default function SquarespaceLanding({ onLaunchApp }) {
           <div className="flex items-center space-x-4">
             <button
               onClick={onLaunchApp}
-              className="px-6 py-2.5 rounded-full bg-slate-950 hover:bg-slate-800 text-white text-xs font-bold tracking-wider uppercase transition-all shadow-sm hover:scale-[1.02] active:scale-[0.98]"
+              className="px-6 py-2.5 rounded-full bg-slate-950 hover:bg-slate-800 text-white text-xs font-bold tracking-wider uppercase transition-all shadow-xs hover:scale-[1.02] active:scale-[0.98]"
             >
-              Get Started
+              Launch Dashboard
             </button>
           </div>
         </div>
@@ -61,20 +61,20 @@ export default function SquarespaceLanding({ onLaunchApp }) {
               ACADEMIC RADAR 3.6
             </span>
             <span className="text-xs font-mono text-slate-600 tracking-wide">
-              S2 Thesis Research &bull; Swarm UAV Formation Control
+              Izmaherdian S2 Research &bull; Swarm UAV Formation Control
             </span>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
             
-            {/* Left: Massive Squarespace Serif Headline */}
+            {/* Left: Massive Serif Headline */}
             <div className="lg:col-span-8 space-y-8">
               <h1 className="font-serif-header text-5xl sm:text-7xl lg:text-8xl font-normal tracking-tight text-slate-950 leading-[0.98]">
-                A research radar that makes paper discovery <span className="italic font-light">real.</span>
+                A research radar that makes paper discovery <span className="italic font-light">effortless.</span>
               </h1>
 
               <p className="text-lg sm:text-xl text-slate-700 font-light leading-relaxed max-w-2xl">
-                Create an autonomous literature monitoring system. Continuously scan arXiv, score papers 1–100 with Gemini AI, and sync with physical ESP32 desk hardware.
+                An autonomous literature monitoring system. Continuously scan arXiv, score papers 1–100 with Gemini AI, and sync directly with physical ESP32 desk hardware.
               </p>
 
               {/* CTAs */}
@@ -83,7 +83,7 @@ export default function SquarespaceLanding({ onLaunchApp }) {
                   onClick={onLaunchApp}
                   className="flex items-center space-x-3 px-8 py-4 rounded-full bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs tracking-wider uppercase transition-all shadow-md hover:scale-[1.02]"
                 >
-                  <span>Launch Live Radar</span>
+                  <span>Launch Live Dashboard</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
 
@@ -110,7 +110,7 @@ export default function SquarespaceLanding({ onLaunchApp }) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent p-6 flex flex-col justify-between">
                     <div className="flex items-center justify-between text-white text-xs font-mono">
-                      <span className="bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full font-bold">LIVE STREAM</span>
+                      <span className="bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full font-bold">LIVE MONITOR</span>
                       <span className="text-emerald-400 font-bold">● MQTT 1883</span>
                     </div>
                     <div className="text-white space-y-1">
@@ -129,7 +129,7 @@ export default function SquarespaceLanding({ onLaunchApp }) {
       </section>
 
 
-      {/* ─── 3. Squarespace Interactive Ticker Bar ──────────────────────── */}
+      {/* ─── 3. Interactive Ticker Bar ──────────────────────────────────── */}
       <section className="py-6 bg-slate-950 text-white font-mono text-xs tracking-widest uppercase overflow-hidden border-y border-slate-900">
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between space-x-8 text-slate-400">
           <div className="flex items-center space-x-2">
@@ -139,7 +139,7 @@ export default function SquarespaceLanding({ onLaunchApp }) {
           <span className="hidden md:inline">&bull;</span>
           <span className="hidden md:inline">GEMINI AI SCORING 1–100</span>
           <span className="hidden md:inline">&bull;</span>
-          <span className="hidden md:inline">ESP32 MQTT OLED HARWARE</span>
+          <span className="hidden md:inline">ESP32 MQTT OLED HARDWARE</span>
           <span className="hidden md:inline">&bull;</span>
           <span className="hidden md:inline">ARXIV ATOM FEED</span>
         </div>
@@ -270,27 +270,32 @@ export default function SquarespaceLanding({ onLaunchApp }) {
       </section>
 
 
-      {/* ─── 5. Squarespace Editorial Manifesto Section ─────────────────── */}
+      {/* ─── 5. Editorial Manifesto Section (Polished Bottom) ───────────── */}
       <section className="py-28 bg-white border-y border-slate-950/10">
         <div className="max-w-5xl mx-auto px-6 text-center space-y-8">
           <span className="text-xs font-mono tracking-widest text-slate-400 uppercase font-bold">
             THE RESEARCH MANIFESTO
           </span>
           <blockquote className="font-serif-header text-3xl sm:text-5xl lg:text-6xl font-normal leading-[1.1] text-slate-950 italic">
-            "A website makes your research real. A dedicated radar keeps you ahead."
+            "A dedicated academic radar transforms how literature is discovered and synthesized."
           </blockquote>
-          <p className="text-sm text-slate-500 font-mono tracking-wide max-w-xl mx-auto">
-            ISMAHERDIAN &bull; MASTER OF INSTRUMENTATION & CONTROL &bull; ITB 2026
-          </p>
+          <div className="space-y-1">
+            <p className="text-sm text-slate-900 font-serif-header font-bold tracking-wide text-lg">
+              IZMAHERDIAN
+            </p>
+            <p className="text-xs text-slate-500 font-mono tracking-widest uppercase">
+              Master of Instrumentation & Control &bull; ITB 2026
+            </p>
+          </div>
         </div>
       </section>
 
 
-      {/* ─── 6. Call to Action Banner ───────────────────────────────────── */}
+      {/* ─── 6. Call to Action Banner (Polished Bottom) ─────────────────── */}
       <section className="py-24 px-6 lg:px-12 max-w-7xl mx-auto">
         <div className="relative rounded-3xl overflow-hidden bg-slate-950 text-white p-12 sm:p-20 text-center space-y-8 border border-slate-900 shadow-2xl">
           
-          {/* Background image overlay inside CTA */}
+          {/* Background image overlay */}
           <img
             src="/images/squarespace_hero.jpg"
             alt="CTA background"
@@ -299,7 +304,7 @@ export default function SquarespaceLanding({ onLaunchApp }) {
 
           <div className="relative z-10 max-w-3xl mx-auto space-y-6">
             <h2 className="font-serif-header text-4xl sm:text-6xl font-normal leading-tight tracking-tight">
-              Create your research radar today.
+              Ready to explore your research radar?
             </h2>
             <p className="text-slate-300 text-base sm:text-lg font-light leading-relaxed">
               Launch the live dashboard to view real-time arXiv literature feeds, Gemini relevance scoring, and ESP32 desk assistant triggers.
@@ -318,12 +323,12 @@ export default function SquarespaceLanding({ onLaunchApp }) {
       </section>
 
 
-      {/* ─── 7. Squarespace Footer ──────────────────────────────────────── */}
+      {/* ─── 7. Clean Minimalist Footer (Polished Bottom) ───────────────── */}
       <footer className="w-full border-t border-slate-950/10 py-12 bg-white text-xs text-slate-500 font-mono">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center space-x-3">
-            <span className="font-serif-header text-xl font-bold text-slate-950">SQUARESPACE / RADAR</span>
-            <span>&copy; 2026 Ismaherdian</span>
+            <span className="font-serif-header text-xl font-bold text-slate-950">ACADEMIC RADAR</span>
+            <span>&copy; 2026 Izmaherdian &bull; ITB S2 Thesis</span>
           </div>
 
           <div className="flex items-center space-x-6 text-slate-700 font-bold">

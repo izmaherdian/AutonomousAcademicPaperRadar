@@ -4,7 +4,7 @@ import StatsOverview from './components/StatsOverview';
 import FilterBar from './components/FilterBar';
 import PaperCard from './components/PaperCard';
 import VirtualESP32Widget from './components/VirtualESP32Widget';
-import SquarespaceLanding from './components/SquarespaceLanding';
+import LandingShowcase from './components/LandingShowcase';
 import {
   fetchPapers,
   toggleStarPaper,
@@ -136,7 +136,7 @@ export default function App() {
 
   // Render Landing Page mode if activeView === 'landing'
   if (activeView === 'landing') {
-    return <SquarespaceLanding onLaunchApp={() => setActiveView('dashboard')} />;
+    return <LandingShowcase onLaunchApp={() => setActiveView('dashboard')} />;
   }
 
   return (
@@ -266,7 +266,7 @@ export default function App() {
 
       {/* Footer */}
       <footer className="w-full border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-400 font-mono">
-        Academic Paper Radar &copy; 2026 &bull; Go Backend &bull; Python Gemini ML &bull; ESP32 MQTT &bull; NGINX Docker
+        Academic Paper Radar &copy; 2026 &bull; Izmaherdian S2 Research &bull; Go Backend &bull; Python Gemini ML &bull; ESP32 MQTT
       </footer>
     </div>
   );

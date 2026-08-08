@@ -48,7 +48,7 @@ export default function Header({
           <button
             onClick={() => onSwitchView(activeView === 'landing' ? 'dashboard' : 'landing')}
             className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-semibold transition-all"
-            title="Toggle Squarespace Showcase Landing Page"
+            title="Toggle Showcase Landing Page"
           >
             <Layout className="w-3.5 h-3.5 text-indigo-600" />
             <span className="hidden sm:inline">{activeView === 'landing' ? 'Go to Dashboard' : 'View Landing Page'}</span>
