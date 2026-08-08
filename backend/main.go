@@ -34,22 +34,26 @@ func main() {
 	}
 	defer db.SqlDB.Close()
 
+	// Keywords yang benar sesuai topik paper penelitian
+	correctKeywords := "swarm UAV formation control, artificial potential field, decentralized multi-agent, event-based control quadcopter, swarm robotics obstacle avoidance"
+
 	// Reset keywords jika masih pakai nilai lama atau kosong
 	storedKw := db.GetSetting("keywords", "")
 	oldDefaults := []string{
 		"",
 		"swarm robotics, decentralized control, drone vtol",
+		"swarm UAV formation control, artificial potential field, decentralized multi-agent, event-based control quadcopter, swarm robotics obstacle avoidance",
 	}
-	isOldDefault := false
+	isOldOrWrong := false
 	for _, old := range oldDefaults {
 		if storedKw == old {
-			isOldDefault = true
+			isOldOrWrong = true
 			break
 		}
 	}
-	if isOldDefault {
-		_ = db.SetSetting("keywords", defaultKeywords)
-		log.Printf("[Startup] Keywords reset to new defaults: %s", defaultKeywords)
+	if isOldOrWrong || storedKw == "" {
+		_ = db.SetSetting("keywords", correctKeywords)
+		log.Printf("[Startup] Keywords set to: %s", correctKeywords)
 	} else {
 		log.Printf("[Startup] Using stored keywords: %s", storedKw)
 	}
@@ -90,7 +94,18 @@ func main() {
 	mqttC.OnFetchTriggered = func() {
 		log.Println("[MQTT Trigger] Fetching arXiv papers manually from ESP32 button press...")
 		kw := db.GetSetting("keywords", defaultKeywords)
-		scraper.FetchPapers(kw, 2)
+		hub.Broadcast("FETCH_STARTED", map[string]string{"keywords": kw, "source": "esp32"})
+		count, err := scraper.FetchPapers(kw, 2)
+		status := "completed"
+		if err != nil {
+			status = "failed"
+			log.Printf("[MQTT Trigger] Fetch error: %v", err)
+		}
+		hub.Broadcast("FETCH_COMPLETED", map[string]interface{}{
+			"count":  count,
+			"status": status,
+			"source": "esp32",
+		})
 	}
 
 	mqttC.OnStarTriggered = func(paperID string) {

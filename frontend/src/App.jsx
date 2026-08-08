@@ -56,9 +56,15 @@ export default function App() {
   useEffect(() => { loadStats(); }, [loadStats]);
 
   // ── WebSocket Listeners ─────────────────────────────────────────────────
+  // Connect ONCE on mount — never reconnect from this effect
   useEffect(() => {
     wsClient.connect();
+    return () => {
+      // Cleanup on unmount — prevent memory leak
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
     const unsubs = [
       wsClient.on('STATUS_CHANGE', ({ connected }) => setIsConnected(connected)),
 
