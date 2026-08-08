@@ -74,15 +74,17 @@ func (s *Scraper) FetchPapers(keywords string, maxResults int) (int, error) {
 	for _, term := range terms {
 		trimmed := strings.TrimSpace(term)
 		if trimmed != "" {
-			// Use ti: OR abs: for each term — no double-encoding with url.QueryEscape
-			queryParts = append(queryParts, fmt.Sprintf("(ti:%q+OR+abs:%q)", trimmed, trimmed))
+			// Use all: prefix with spaces encoded as + — most reliable arXiv format
+			encoded := strings.ReplaceAll(trimmed, " ", "+")
+			queryParts = append(queryParts, "all:"+encoded)
 		}
 	}
 	searchQuery := strings.Join(queryParts, "+OR+")
 
-	// Always start at 0 for niche topics with few papers
+	// Always start at 0 for niche topics
 	apiURL := fmt.Sprintf("http://export.arxiv.org/api/query?search_query=%s&start=0&max_results=%d&sortBy=submittedDate&sortOrder=descending",
 		searchQuery, maxResults)
+
 
 	log.Printf("[Scraper] Querying arXiv API: %s", apiURL)
 	resp, err := http.Get(apiURL)
@@ -106,6 +108,8 @@ func (s *Scraper) FetchPapers(keywords string, maxResults int) (int, error) {
 	if err := xml.Unmarshal(body, &feed); err != nil {
 		return 0, fmt.Errorf("failed to parse arXiv XML feed: %w", err)
 	}
+
+	log.Printf("[Scraper] arXiv returned %d entries for query", len(feed.Entries))
 
 	savedCount := 0
 	for _, entry := range feed.Entries {

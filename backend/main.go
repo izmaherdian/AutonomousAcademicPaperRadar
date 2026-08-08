@@ -34,9 +34,24 @@ func main() {
 	}
 	defer db.SqlDB.Close()
 
-	// Ensure default keywords setting is stored
-	if db.GetSetting("keywords", "") == "" {
+	// Reset keywords jika masih pakai nilai lama atau kosong
+	storedKw := db.GetSetting("keywords", "")
+	oldDefaults := []string{
+		"",
+		"swarm robotics, decentralized control, drone vtol",
+	}
+	isOldDefault := false
+	for _, old := range oldDefaults {
+		if storedKw == old {
+			isOldDefault = true
+			break
+		}
+	}
+	if isOldDefault {
 		_ = db.SetSetting("keywords", defaultKeywords)
+		log.Printf("[Startup] Keywords reset to new defaults: %s", defaultKeywords)
+	} else {
+		log.Printf("[Startup] Using stored keywords: %s", storedKw)
 	}
 
 	// 3. Initialize WebSocket Hub
