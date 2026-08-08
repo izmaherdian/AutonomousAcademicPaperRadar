@@ -1,377 +1,315 @@
 import React from 'react';
-import { ArrowUpRight, Radar, Cpu, Brain, Zap, Shield, Sparkles, CheckCircle2, ChevronRight } from 'lucide-react';
+import { ArrowUpRight, Radar, Cpu, Brain, Sparkles, CheckCircle2, ChevronRight, Play, Compass, ArrowRight } from 'lucide-react';
 
 export default function SquarespaceLanding({ onLaunchApp }) {
   return (
     <div className="min-h-screen bg-[#fcfbf9] text-slate-900 font-sans selection:bg-slate-900 selection:text-white">
 
-      {/* ─── 1. Minimalist Transparent Navbar ───────────────────────────── */}
+      {/* ─── 1. Squarespace Minimalist Navigation ─────────────────────────── */}
       <header className="sticky top-0 z-50 w-full glass-panel border-b border-slate-900/10 transition-all">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
 
-          {/* Left: Brand Logo */}
+          {/* Left: Squarespace-style Typography Logo */}
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center text-white">
               <Radar className="w-4 h-4 animate-spin-slow" />
             </div>
-            <span className="font-serif-header text-xl font-bold tracking-tight text-slate-900">
-              RADAR<span className="text-slate-400 font-sans font-light">.ai</span>
+            <span className="font-serif-header text-2xl font-bold tracking-tight text-slate-950">
+              SQUARESPACE <span className="font-sans font-light text-xs tracking-widest text-slate-500 uppercase">/ RADAR</span>
             </span>
           </div>
 
-          {/* Middle: Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600">
-            <a href="#hero" className="hover:text-slate-900 transition-colors">Overview</a>
-            <a href="#features" className="hover:text-slate-900 transition-colors">Capabilities</a>
-            <a href="#architecture" className="hover:text-slate-900 transition-colors">Architecture</a>
-            <a href="#paper" className="hover:text-slate-900 transition-colors">S2 Research</a>
+          {/* Middle: Clean Links */}
+          <nav className="hidden md:flex items-center space-x-9 text-xs font-semibold tracking-wider text-slate-600 uppercase font-mono">
+            <a href="#hero" className="hover:text-slate-950 transition-colors">Overview</a>
+            <a href="#templates" className="hover:text-slate-950 transition-colors">Features</a>
+            <a href="#architecture" className="hover:text-slate-950 transition-colors">Stack</a>
+            <a href="#paper" className="hover:text-slate-950 transition-colors">S2 Research</a>
           </nav>
 
-          {/* Right: Solid Black Rounded CTA Button */}
-          <div className="flex items-center space-x-3">
+          {/* Right: Solid Black Pill CTA Button */}
+          <div className="flex items-center space-x-4">
             <button
               onClick={onLaunchApp}
-              className="px-6 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold tracking-wide transition-all shadow-xs hover:scale-[1.02] active:scale-[0.98]"
+              className="px-6 py-2.5 rounded-full bg-slate-950 hover:bg-slate-800 text-white text-xs font-bold tracking-wider uppercase transition-all shadow-sm hover:scale-[1.02] active:scale-[0.98]"
             >
-              Launch Radar
+              Get Started
             </button>
           </div>
         </div>
       </header>
 
 
-      {/* ─── 2. Hero Section (Left-Aligned, Generous Whitespace) ─────────── */}
-      <section id="hero" className="pt-20 pb-24 md:pt-28 md:pb-36 px-6 lg:px-12 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      {/* ─── 2. Full-Bleed Aesthetic Hero Section ───────────────────────── */}
+      <section id="hero" className="relative overflow-hidden pt-12 pb-24 lg:pt-20 lg:pb-36 border-b border-slate-900/10">
+        
+        {/* Background Image Container with Soft Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/images/squarespace_hero.jpg"
+            alt="Aesthetic Background"
+            className="w-full h-full object-cover opacity-35 filter brightness-105 contrast-95 scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#fcfbf9]/40 via-[#fcfbf9]/80 to-[#fcfbf9]"></div>
+        </div>
 
-          {/* Left Column: Left-Aligned Editorial Headline & CTA */}
-          <div className="lg:col-span-7 space-y-8">
-
-            {/* Tagline Badge */}
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-slate-900/5 border border-slate-900/10 text-xs font-semibold tracking-wide text-slate-700">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span>S2 Thesis Research · Swarm UAV Formation Control</span>
-            </div>
-
-            {/* Main Serif Headline */}
-            <h1 className="font-serif-header text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-slate-950 leading-[1.08]">
-              Autonomous Intelligence for Academic Research.
-            </h1>
-
-            {/* Sleek Subtitle */}
-            <p className="text-lg sm:text-xl text-slate-600 font-light leading-relaxed max-w-2xl">
-              An agentic radar that continuously scans arXiv, analyzes UAV swarm & artificial potential field literature with Gemini AI, scores relevance 1–100, and syncs directly with physical ESP32 hardware.
-            </p>
-
-            {/* CTA Group: Ultra-minimal Primary Button */}
-            <div className="flex flex-wrap items-center gap-4 pt-2">
-              <button
-                onClick={onLaunchApp}
-                className="flex items-center space-x-3 px-8 py-4 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm transition-all shadow-sm hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <span>Explore Live Radar</span>
-                <ArrowUpRight className="w-4 h-4" />
-              </button>
-
-              <a
-                href="https://rdcu.be/fyDRz"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-2 px-7 py-4 rounded-full bg-white hover:bg-slate-100 text-slate-900 border border-slate-900/15 font-semibold text-sm transition-all"
-              >
-                <span>Read S2 Paper</span>
-                <ChevronRight className="w-4 h-4 text-slate-400" />
-              </a>
-            </div>
-
-            {/* Sub-text stats */}
-            <div className="pt-8 border-t border-slate-900/10 grid grid-cols-3 gap-6 max-w-lg">
-              <div>
-                <div className="font-serif-header text-2xl font-bold text-slate-900">100%</div>
-                <div className="text-xs text-slate-500 mt-0.5">Automated Scan</div>
-              </div>
-              <div>
-                <div className="font-serif-header text-2xl font-bold text-slate-900">1–100</div>
-                <div className="text-xs text-slate-500 mt-0.5">Granular Score</div>
-              </div>
-              <div>
-                <div className="font-serif-header text-2xl font-bold text-slate-900">&lt;2s</div>
-                <div className="text-xs text-slate-500 mt-0.5">ESP32 Sync</div>
-              </div>
-            </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
+          
+          {/* Top Tagline */}
+          <div className="mb-6 flex items-center space-x-3">
+            <span className="px-3 py-1 rounded-full bg-slate-950 text-white text-[11px] font-mono tracking-widest uppercase font-semibold">
+              ACADEMIC RADAR 3.6
+            </span>
+            <span className="text-xs font-mono text-slate-600 tracking-wide">
+              S2 Thesis Research &bull; Swarm UAV Formation Control
+            </span>
           </div>
 
-          {/* Right Column: Hero Visual Showcase */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative rounded-2xl overflow-hidden card-subtle p-2 bg-white shadow-2xs group">
-              <div className="relative rounded-xl overflow-hidden bg-slate-900 aspect-[4/5] flex flex-col justify-between p-8 text-white">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
+            
+            {/* Left: Massive Squarespace Serif Headline */}
+            <div className="lg:col-span-8 space-y-8">
+              <h1 className="font-serif-header text-5xl sm:text-7xl lg:text-8xl font-normal tracking-tight text-slate-950 leading-[0.98]">
+                A research radar that makes paper discovery <span className="italic font-light">real.</span>
+              </h1>
 
-                {/* Background Art Pattern */}
-                <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#4f46e5_1px,transparent_1px)] [background-size:16px_16px]"></div>
+              <p className="text-lg sm:text-xl text-slate-700 font-light leading-relaxed max-w-2xl">
+                Create an autonomous literature monitoring system. Continuously scan arXiv, score papers 1–100 with Gemini AI, and sync with physical ESP32 desk hardware.
+              </p>
 
-                {/* Top Badge */}
-                <div className="relative z-10 flex items-center justify-between">
-                  <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-mono border border-white/10">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                    <span>GEMINI FLASH 3.6</span>
-                  </div>
-                  <span className="text-xs font-mono text-emerald-400">● REALTIME</span>
-                </div>
+              {/* CTAs */}
+              <div className="flex flex-wrap items-center gap-4 pt-2">
+                <button
+                  onClick={onLaunchApp}
+                  className="flex items-center space-x-3 px-8 py-4 rounded-full bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs tracking-wider uppercase transition-all shadow-md hover:scale-[1.02]"
+                >
+                  <span>Launch Live Radar</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
 
-                {/* Center Visual Mockup */}
-                <div className="relative z-10 my-auto space-y-4">
-                  <div className="p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/10 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-wider">High Relevance Alert</span>
-                      <span className="text-[10px] font-mono bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded font-bold">SCORE 87/100</span>
+                <a
+                  href="https://rdcu.be/fyDRz"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center space-x-2 px-8 py-4 rounded-full bg-white hover:bg-slate-100 text-slate-950 border border-slate-950/20 font-bold text-xs tracking-wider uppercase transition-all"
+                >
+                  <span>Read Springer Paper</span>
+                  <ArrowUpRight className="w-4 h-4 text-slate-400" />
+                </a>
+              </div>
+            </div>
+
+            {/* Right: Floating Aesthetic Hero Card */}
+            <div className="lg:col-span-4">
+              <div className="card-subtle rounded-2xl overflow-hidden p-3 bg-white/90 backdrop-blur-md shadow-lg border border-slate-950/10">
+                <div className="relative rounded-xl overflow-hidden aspect-[4/3] bg-slate-900 group">
+                  <img
+                    src="/images/squarespace_hero.jpg"
+                    alt="Hero Visual"
+                    className="w-full h-full object-cover img-zoom opacity-80"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent p-6 flex flex-col justify-between">
+                    <div className="flex items-center justify-between text-white text-xs font-mono">
+                      <span className="bg-white/20 backdrop-blur-md px-2.5 py-1 rounded-full font-bold">LIVE STREAM</span>
+                      <span className="text-emerald-400 font-bold">● MQTT 1883</span>
                     </div>
-                    <h4 className="font-serif-header text-lg font-bold leading-tight">
-                      Decentralized Formation Control using Improved APF & Event-Based Reconfiguration
-                    </h4>
-                    <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
-                      Mengusulkan kontrol formasi terdesentralisasi untuk swarm quadcopter dengan algoritma APF yang ditingkatkan...
-                    </p>
+                    <div className="text-white space-y-1">
+                      <div className="text-[10px] font-mono text-amber-400 uppercase tracking-widest font-bold">Latest High Relevance Alert</div>
+                      <h4 className="font-serif-header text-lg font-bold leading-tight">
+                        Decentralized Swarm UAV Formation Control
+                      </h4>
+                    </div>
                   </div>
-                </div>
-
-                {/* Bottom Bar */}
-                <div className="relative z-10 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400 font-mono">
-                  <span>MQTT BROKER: 1883</span>
-                  <span>ESP32 DESK ASSISTANT</span>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>
 
 
-      {/* ─── 3. Editorial Manifesto Quote ──────────────────────────────── */}
-      <section className="py-20 border-y border-slate-900/10 bg-white">
-        <div className="max-w-4xl mx-auto px-6 text-center space-y-6">
-          <p className="text-xs font-mono tracking-widest text-slate-400 uppercase">
-            RESEARCH MANIFESTO
+      {/* ─── 3. Squarespace Interactive Ticker Bar ──────────────────────── */}
+      <section className="py-6 bg-slate-950 text-white font-mono text-xs tracking-widest uppercase overflow-hidden border-y border-slate-900">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between space-x-8 text-slate-400">
+          <div className="flex items-center space-x-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="text-white font-bold">AUTONOMOUS MONITORING</span>
+          </div>
+          <span className="hidden md:inline">&bull;</span>
+          <span className="hidden md:inline">GEMINI AI SCORING 1–100</span>
+          <span className="hidden md:inline">&bull;</span>
+          <span className="hidden md:inline">ESP32 MQTT OLED HARWARE</span>
+          <span className="hidden md:inline">&bull;</span>
+          <span className="hidden md:inline">ARXIV ATOM FEED</span>
+        </div>
+      </section>
+
+
+      {/* ─── 4. Main Feature Grid (3 Columns with Aesthetic Photo Covers) ── */}
+      <section id="templates" className="py-24 lg:py-36 px-6 lg:px-12 max-w-7xl mx-auto">
+        
+        {/* Section Title */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-16 pb-8 border-b border-slate-950/10 gap-6">
+          <div className="space-y-4">
+            <span className="text-xs font-mono font-bold tracking-widest text-slate-400 uppercase">
+              FEATURED CAPABILITIES
+            </span>
+            <h2 className="font-serif-header text-5xl sm:text-6xl font-normal tracking-tight text-slate-950">
+              Everything you need to master your field.
+            </h2>
+          </div>
+          <p className="text-base text-slate-600 font-light max-w-md leading-relaxed">
+            Crafted for academic researchers who demand high-precision literature analysis with physical desk presence.
           </p>
-          <blockquote className="font-serif-header text-2xl md:text-4xl font-normal leading-snug text-slate-900 italic">
-            "Designed for researchers who need high-precision academic monitoring without the noise of generic search engines."
+        </div>
+
+        {/* 3-Column Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+
+          {/* Card 1: UAV Swarm Research */}
+          <div className="group card-subtle rounded-3xl overflow-hidden bg-white border border-slate-950/10 flex flex-col justify-between">
+            <div className="space-y-6">
+              {/* Photo Cover */}
+              <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                <img
+                  src="/images/uav_swarm.jpg"
+                  alt="Swarm UAV Research"
+                  className="w-full h-full object-cover img-zoom"
+                />
+                <div className="absolute top-4 left-4 bg-slate-950/90 text-white px-3 py-1 rounded-full text-[10px] font-mono tracking-widest uppercase font-bold">
+                  01 / RESEARCH FOCUS
+                </div>
+              </div>
+
+              {/* Card Body */}
+              <div className="p-6 pt-0 space-y-3">
+                <h3 className="font-serif-header text-3xl font-normal text-slate-950">
+                  Swarm UAV Formation
+                </h3>
+                <p className="text-sm text-slate-600 font-light leading-relaxed">
+                  Targeted scraping for quadcopter formation control, artificial potential fields (APF), and event-based reconfiguration.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-6 pt-0 border-t border-slate-950/5 flex items-center justify-between text-xs font-mono font-bold text-slate-950 uppercase">
+              <span>EXPLORE SCRAPER</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </div>
+
+          {/* Card 2: Gemini AI Scoring */}
+          <div className="group card-subtle rounded-3xl overflow-hidden bg-white border border-slate-950/10 flex flex-col justify-between">
+            <div className="space-y-6">
+              {/* Photo Cover */}
+              <div className="relative aspect-[16/10] overflow-hidden bg-slate-900 p-6 flex flex-col justify-between text-white">
+                <div className="flex items-center justify-between z-10">
+                  <span className="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-mono tracking-widest uppercase font-bold">
+                    02 / INTELLIGENCE
+                  </span>
+                  <Sparkles className="w-4 h-4 text-amber-400" />
+                </div>
+                <div className="z-10 space-y-1">
+                  <div className="text-[10px] font-mono text-emerald-400 font-bold">GEMINI 3.6 FLASH</div>
+                  <div className="font-serif-header text-2xl font-bold">Indonesian Summaries with **Bold** Key Terms</div>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-900/60 to-slate-950 opacity-90"></div>
+              </div>
+
+              {/* Card Body */}
+              <div className="p-6 pt-0 space-y-3">
+                <h3 className="font-serif-header text-3xl font-normal text-slate-950">
+                  Granular AI Scoring
+                </h3>
+                <p className="text-sm text-slate-600 font-light leading-relaxed">
+                  Evaluates every paper on a 1–100 relevance scale, generating structured summaries with highlighted technical keywords.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-6 pt-0 border-t border-slate-950/5 flex items-center justify-between text-xs font-mono font-bold text-slate-950 uppercase">
+              <span>VIEW SCORING RUBRIC</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </div>
+
+          {/* Card 3: Physical ESP32 Hardware */}
+          <div className="group card-subtle rounded-3xl overflow-hidden bg-white border border-slate-950/10 flex flex-col justify-between">
+            <div className="space-y-6">
+              {/* Photo Cover */}
+              <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                <img
+                  src="/images/esp32_hardware.jpg"
+                  alt="ESP32 Desk Hardware"
+                  className="w-full h-full object-cover img-zoom"
+                />
+                <div className="absolute top-4 left-4 bg-slate-950/90 text-white px-3 py-1 rounded-full text-[10px] font-mono tracking-widest uppercase font-bold">
+                  03 / DESK HARDWARE
+                </div>
+              </div>
+
+              {/* Card Body */}
+              <div className="p-6 pt-0 space-y-3">
+                <h3 className="font-serif-header text-3xl font-normal text-slate-950">
+                  Physical ESP32 Assistant
+                </h3>
+                <p className="text-sm text-slate-600 font-light leading-relaxed">
+                  Real-time MQTT desk widget: Press **[F]** to trigger arXiv paper fetch, **[S]** to star papers directly from your desk.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-6 pt-0 border-t border-slate-950/5 flex items-center justify-between text-xs font-mono font-bold text-slate-950 uppercase">
+              <span>SIMULATE HARDWARE</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+
+      {/* ─── 5. Squarespace Editorial Manifesto Section ─────────────────── */}
+      <section className="py-28 bg-white border-y border-slate-950/10">
+        <div className="max-w-5xl mx-auto px-6 text-center space-y-8">
+          <span className="text-xs font-mono tracking-widest text-slate-400 uppercase font-bold">
+            THE RESEARCH MANIFESTO
+          </span>
+          <blockquote className="font-serif-header text-3xl sm:text-5xl lg:text-6xl font-normal leading-[1.1] text-slate-950 italic">
+            "A website makes your research real. A dedicated radar keeps you ahead."
           </blockquote>
-          <p className="text-xs text-slate-500 font-mono tracking-wide">
+          <p className="text-sm text-slate-500 font-mono tracking-wide max-w-xl mx-auto">
             ISMAHERDIAN &bull; MASTER OF INSTRUMENTATION & CONTROL &bull; ITB 2026
           </p>
         </div>
       </section>
 
 
-      {/* ─── 4. Feature Grid (3-Column Layout, 1px Border Cards) ────────── */}
-      <section id="features" className="py-24 px-6 lg:px-12 max-w-7xl mx-auto">
-        
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-6 border-b border-slate-900/10 gap-6">
-          <div className="space-y-3">
-            <span className="text-xs font-mono tracking-widest text-slate-400 uppercase">CAPABILITIES</span>
-            <h2 className="font-serif-header text-4xl lg:text-5xl font-bold tracking-tight text-slate-950">
-              Built for Precision Research.
-            </h2>
-          </div>
-          <p className="text-sm text-slate-600 max-w-md leading-relaxed font-light">
-            A harmonized stack integrating Go background microservices, Python Gemini AI, and hardware MQTT communication.
-          </p>
-        </div>
-
-        {/* 3-Column Feature Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-          {/* Card 1: Automated Scraping */}
-          <div className="group card-subtle rounded-2xl overflow-hidden p-6 flex flex-col justify-between bg-white">
-            <div className="space-y-6">
-              {/* Category Tag */}
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold tracking-widest text-slate-400 uppercase">
-                  01 / SCRAPING
-                </span>
-                <div className="p-2 rounded-xl bg-slate-100 text-slate-700">
-                  <Radar className="w-4 h-4" />
-                </div>
-              </div>
-
-              {/* Card Image Wrapper */}
-              <div className="relative rounded-xl overflow-hidden aspect-[16/10] bg-slate-100 border border-slate-900/5">
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-slate-200 flex items-center justify-center p-6 text-center">
-                  <div className="space-y-2">
-                    <div className="text-xs font-mono text-indigo-600 font-bold">arXiv Atom API</div>
-                    <div className="font-serif-header text-xl font-bold text-slate-900">Targeted Title & Abstract Query</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="space-y-2">
-                <h3 className="font-serif-header text-2xl font-bold text-slate-950">
-                  Automated arXiv Scraper
-                </h3>
-                <p className="text-sm text-slate-600 leading-relaxed font-light">
-                  Continuous Go-cron background scraper querying arXiv with strict title & abstract phrase operators, avoiding irrelevant papers completely.
-                </p>
-              </div>
-            </div>
-
-            <div className="pt-6 mt-6 border-t border-slate-900/5 flex items-center text-xs font-semibold text-slate-900">
-              <span>Explore Scraper Logic</span>
-              <ChevronRight className="w-3.5 h-3.5 ml-1 text-slate-400 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </div>
-
-          {/* Card 2: AI Analysis & Scoring */}
-          <div className="group card-subtle rounded-2xl overflow-hidden p-6 flex flex-col justify-between bg-white">
-            <div className="space-y-6">
-              {/* Category Tag */}
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold tracking-widest text-slate-400 uppercase">
-                  02 / INTELLIGENCE
-                </span>
-                <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600">
-                  <Brain className="w-4 h-4" />
-                </div>
-              </div>
-
-              {/* Card Image Wrapper */}
-              <div className="relative rounded-xl overflow-hidden aspect-[16/10] bg-slate-100 border border-slate-900/5">
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 to-teal-100 flex items-center justify-center p-6 text-center">
-                  <div className="space-y-2">
-                    <div className="text-xs font-mono text-emerald-700 font-bold">Gemini 3.6 Flash</div>
-                    <div className="font-serif-header text-xl font-bold text-slate-900">Granular 1–100 Scoring Rubric</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="space-y-2">
-                <h3 className="font-serif-header text-2xl font-bold text-slate-950">
-                  Deep AI Scoring & Summary
-                </h3>
-                <p className="text-sm text-slate-600 leading-relaxed font-light">
-                  Evaluates each paper against S2 thesis topics (swarm UAVs, APF, decentralized control) and generates structured Indonesian summaries with **bold** key terms.
-                </p>
-              </div>
-            </div>
-
-            <div className="pt-6 mt-6 border-t border-slate-900/5 flex items-center text-xs font-semibold text-slate-900">
-              <span>View Scoring Rubric</span>
-              <ChevronRight className="w-3.5 h-3.5 ml-1 text-slate-400 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </div>
-
-          {/* Card 3: ESP32 Hardware Assistant */}
-          <div className="group card-subtle rounded-2xl overflow-hidden p-6 flex flex-col justify-between bg-white">
-            <div className="space-y-6">
-              {/* Category Tag */}
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold tracking-widest text-slate-400 uppercase">
-                  03 / HARDWARE
-                </span>
-                <div className="p-2 rounded-xl bg-amber-50 text-amber-600">
-                  <Cpu className="w-4 h-4" />
-                </div>
-              </div>
-
-              {/* Card Image Wrapper */}
-              <div className="relative rounded-xl overflow-hidden aspect-[16/10] bg-slate-100 border border-slate-900/5">
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-50 to-orange-100 flex items-center justify-center p-6 text-center">
-                  <div className="space-y-2">
-                    <div className="text-xs font-mono text-amber-700 font-bold">OLED & MQTT Broker</div>
-                    <div className="font-serif-header text-xl font-bold text-slate-900">ESP32 Desk Hardware Sync</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="space-y-2">
-                <h3 className="font-serif-header text-2xl font-bold text-slate-950">
-                  Physical ESP32 Assistant
-                </h3>
-                <p className="text-sm text-slate-600 leading-relaxed font-light">
-                  Real-time MQTT integration with physical OLED display & physical buttons: Press **[F]** to trigger arXiv scrape, **[S]** to star papers instantly.
-                </p>
-              </div>
-            </div>
-
-            <div className="pt-6 mt-6 border-t border-slate-900/5 flex items-center text-xs font-semibold text-slate-900">
-              <span>Simulate ESP32 Assistant</span>
-              <ChevronRight className="w-3.5 h-3.5 ml-1 text-slate-400 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-
-      {/* ─── 5. Architecture Highlights Section ─────────────────────────── */}
-      <section id="architecture" className="py-24 bg-white border-t border-slate-900/10">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
-            <div className="lg:col-span-5 space-y-6">
-              <span className="text-xs font-mono tracking-widest text-slate-400 uppercase">SYSTEM ARCHITECTURE</span>
-              <h2 className="font-serif-header text-4xl lg:text-5xl font-bold tracking-tight text-slate-950">
-                Microservice Stack in Docker.
-              </h2>
-              <p className="text-slate-600 font-light leading-relaxed text-sm sm:text-base">
-                Architected with Go for lightning-fast REST & WebSocket handling, SQLite WAL for zero-latency persistence, and Python FastAPI for Gemini ML execution.
-              </p>
-              
-              <ul className="space-y-3 pt-2">
-                {[
-                  'Go 1.21 Backend REST API + WebSocket Hub',
-                  'Python FastAPI + Google Gemini 3.6 Flash ML Engine',
-                  'Eclipse Mosquitto MQTT Broker on Port 1883',
-                  'NGINX Reverse Proxy with SSL / Cloudflare Tunnel Support',
-                ].map((item, idx) => (
-                  <li key={idx} className="flex items-center space-x-3 text-xs sm:text-sm text-slate-700">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="lg:col-span-7">
-              <div className="card-subtle rounded-2xl p-6 sm:p-8 bg-[#0b0f19] text-white font-mono text-xs space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                  <span className="text-slate-400">docker-compose.yml</span>
-                  <span className="text-emerald-400">● 6 CONTAINERS HEALTHY</span>
-                </div>
-                <pre className="text-slate-300 overflow-x-auto leading-relaxed">
-{`services:
-  nginx:       image: nginx:alpine (Port 80)
-  backend:     image: golang:1.21 (Port 8080)
-  ml-service:  image: python:3.10 (Port 5000)
-  broker:      image: eclipse-mosquitto:2.0 (Port 1883)
-  tunnel:      image: cloudflare/cloudflared:latest`}
-                </pre>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-
       {/* ─── 6. Call to Action Banner ───────────────────────────────────── */}
       <section className="py-24 px-6 lg:px-12 max-w-7xl mx-auto">
-        <div className="card-subtle rounded-3xl p-10 sm:p-16 bg-slate-900 text-white text-center space-y-8 relative overflow-hidden">
-          <div className="max-w-2xl mx-auto space-y-4 relative z-10">
-            <h2 className="font-serif-header text-4xl sm:text-5xl font-bold tracking-tight">
-              Ready to Monitor Research?
+        <div className="relative rounded-3xl overflow-hidden bg-slate-950 text-white p-12 sm:p-20 text-center space-y-8 border border-slate-900 shadow-2xl">
+          
+          {/* Background image overlay inside CTA */}
+          <img
+            src="/images/squarespace_hero.jpg"
+            alt="CTA background"
+            className="absolute inset-0 w-full h-full object-cover opacity-15 filter brightness-125"
+          />
+
+          <div className="relative z-10 max-w-3xl mx-auto space-y-6">
+            <h2 className="font-serif-header text-4xl sm:text-6xl font-normal leading-tight tracking-tight">
+              Create your research radar today.
             </h2>
-            <p className="text-slate-400 text-sm sm:text-base font-light leading-relaxed">
+            <p className="text-slate-300 text-base sm:text-lg font-light leading-relaxed">
               Launch the live dashboard to view real-time arXiv literature feeds, Gemini relevance scoring, and ESP32 desk assistant triggers.
             </p>
             <div className="pt-4 flex justify-center">
               <button
                 onClick={onLaunchApp}
-                className="flex items-center space-x-3 px-8 py-4 rounded-full bg-white hover:bg-slate-100 text-slate-900 font-bold text-sm transition-all shadow-md hover:scale-[1.02]"
+                className="flex items-center space-x-3 px-9 py-4 rounded-full bg-white hover:bg-slate-100 text-slate-950 font-bold text-xs tracking-wider uppercase transition-all shadow-lg hover:scale-[1.02]"
               >
-                <span>Open Radar Dashboard</span>
+                <span>Launch Radar Dashboard</span>
                 <ArrowUpRight className="w-4 h-4" />
               </button>
             </div>
@@ -380,18 +318,18 @@ export default function SquarespaceLanding({ onLaunchApp }) {
       </section>
 
 
-      {/* ─── 7. Squarespace Minimalist Footer ───────────────────────────── */}
-      <footer className="w-full border-t border-slate-900/10 py-12 bg-white text-xs text-slate-500 font-mono">
+      {/* ─── 7. Squarespace Footer ──────────────────────────────────────── */}
+      <footer className="w-full border-t border-slate-950/10 py-12 bg-white text-xs text-slate-500 font-mono">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center space-x-2">
-            <span className="font-serif-header text-base font-bold text-slate-900">RADAR.ai</span>
-            <span>&copy; 2026 Ismaherdian &bull; ITB S2 Thesis</span>
+          <div className="flex items-center space-x-3">
+            <span className="font-serif-header text-xl font-bold text-slate-950">SQUARESPACE / RADAR</span>
+            <span>&copy; 2026 Ismaherdian</span>
           </div>
 
-          <div className="flex items-center space-x-6 text-slate-600">
-            <a href="https://rdcu.be/fyDRz" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900 transition-colors">Springer Paper</a>
-            <a href="https://arxiv.org" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900 transition-colors">arXiv API</a>
-            <a href="https://github.com/izmaherdian/AutonomousAcademicPaperRadar" target="_blank" rel="noopener noreferrer" className="hover:text-slate-900 transition-colors">GitHub Repository</a>
+          <div className="flex items-center space-x-6 text-slate-700 font-bold">
+            <a href="https://rdcu.be/fyDRz" target="_blank" rel="noopener noreferrer" className="hover:text-slate-950 transition-colors">Springer Paper</a>
+            <a href="https://arxiv.org" target="_blank" rel="noopener noreferrer" className="hover:text-slate-950 transition-colors">arXiv API</a>
+            <a href="https://github.com/izmaherdian/AutonomousAcademicPaperRadar" target="_blank" rel="noopener noreferrer" className="hover:text-slate-950 transition-colors">GitHub Repository</a>
           </div>
         </div>
       </footer>
