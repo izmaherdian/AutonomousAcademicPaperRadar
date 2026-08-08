@@ -1,6 +1,7 @@
 # Environment & Secrets
 .env
 .env.local
+PRD.md
 
 # Databases & Data Volumes
 *.db
