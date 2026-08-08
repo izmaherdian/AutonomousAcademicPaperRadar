@@ -69,24 +69,45 @@ func (s *Scraper) FetchPapers(keywords string, maxResults int) (int, error) {
 		keywords = "swarm UAV formation control, artificial potential field, decentralized multi-agent, event-based control quadcopter, swarm robotics obstacle avoidance"
 	}
 
+	startOffset := 0
+	stats, err := s.DB.GetStats()
+	if err == nil {
+		startOffset = stats.TotalPapers
+	}
+
 	terms := strings.Split(keywords, ",")
 	var queryParts []string
 	for _, term := range terms {
 		trimmed := strings.TrimSpace(term)
-		if trimmed != "" {
-			// Use all: prefix with spaces encoded as + — most reliable arXiv format
-			encoded := strings.ReplaceAll(trimmed, " ", "+")
-			queryParts = append(queryParts, "all:"+encoded)
+		if trimmed == "" {
+			continue
 		}
+
+		words := strings.Fields(trimmed)
+		if len(words) == 0 {
+			continue
+		}
+
+		var tiParts []string
+		var absParts []string
+		for _, word := range words {
+			escaped := url.QueryEscape(word)
+			tiParts = append(tiParts, "ti:"+escaped)
+			absParts = append(absParts, "abs:"+escaped)
+		}
+
+		tiQuery := strings.Join(tiParts, "+AND+")
+		absQuery := strings.Join(absParts, "+AND+")
+
+		part := fmt.Sprintf("((%s)+OR+(%s))", tiQuery, absQuery)
+		queryParts = append(queryParts, part)
 	}
 	searchQuery := strings.Join(queryParts, "+OR+")
 
-	// Always start at 0 for niche topics
-	apiURL := fmt.Sprintf("http://export.arxiv.org/api/query?search_query=%s&start=0&max_results=%d&sortBy=submittedDate&sortOrder=descending",
-		searchQuery, maxResults)
+	apiURL := fmt.Sprintf("http://export.arxiv.org/api/query?search_query=%s&start=%d&max_results=%d&sortBy=submittedDate&sortOrder=descending",
+		searchQuery, startOffset, maxResults)
 
-
-	log.Printf("[Scraper] Querying arXiv API: %s", apiURL)
+	log.Printf("[Scraper] Querying arXiv API (start=%d): %s", startOffset, apiURL)
 	resp, err := http.Get(apiURL)
 	if err != nil {
 		s.DB.LogEvent(fmt.Sprintf("arXiv API fetch error: %v", err))
