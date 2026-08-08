@@ -7,9 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math/rand"
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 
@@ -68,7 +66,7 @@ func NewScraper(db *database.DB, mlServiceURL string) *Scraper {
 
 func (s *Scraper) FetchPapers(keywords string, maxResults int) (int, error) {
 	if keywords == "" {
-		keywords = "swarm robotics, decentralized control, drone vtol"
+		keywords = "swarm UAV formation control, artificial potential field, decentralized multi-agent, event-based control quadcopter, swarm robotics obstacle avoidance"
 	}
 
 	terms := strings.Split(keywords, ",")
@@ -76,16 +74,15 @@ func (s *Scraper) FetchPapers(keywords string, maxResults int) (int, error) {
 	for _, term := range terms {
 		trimmed := strings.TrimSpace(term)
 		if trimmed != "" {
-			queryParts = append(queryParts, fmt.Sprintf("all:\"%s\"", trimmed))
+			// Use ti: OR abs: for each term — no double-encoding with url.QueryEscape
+			queryParts = append(queryParts, fmt.Sprintf("(ti:%q+OR+abs:%q)", trimmed, trimmed))
 		}
 	}
 	searchQuery := strings.Join(queryParts, "+OR+")
 
-	// Pick a random start offset (0 to 40) so each manual trigger fetches fresh unseen papers
-	startOffset := rand.Intn(40)
-
-	apiURL := fmt.Sprintf("http://export.arxiv.org/api/query?search_query=%s&start=%d&max_results=%d&sortBy=submittedDate&sortOrder=descending",
-		url.QueryEscape(searchQuery), startOffset, maxResults)
+	// Always start at 0 for niche topics with few papers
+	apiURL := fmt.Sprintf("http://export.arxiv.org/api/query?search_query=%s&start=0&max_results=%d&sortBy=submittedDate&sortOrder=descending",
+		searchQuery, maxResults)
 
 	log.Printf("[Scraper] Querying arXiv API: %s", apiURL)
 	resp, err := http.Get(apiURL)
@@ -148,7 +145,7 @@ func (s *Scraper) FetchPapers(keywords string, maxResults int) (int, error) {
 			mlResp = &MLResponse{
 				SummaryAI:      cleanAbstract,
 				RelevanceScore: 50,
-				Tags:           []string{"#arxiv", "#research"},
+				Tags:           []string{"#swarm-robotics", "#control-systems"},
 			}
 		}
 

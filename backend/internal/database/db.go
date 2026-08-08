@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -28,6 +29,8 @@ type Paper struct {
 	IsStarred      bool     `json:"is_starred"`
 	IsRead         bool     `json:"is_read"`
 	CreatedAt      string   `json:"created_at"`
+	FetchDay       string   `json:"fetch_day"`
+	FetchTime      string   `json:"fetch_time"`
 }
 
 type SystemLog struct {
@@ -77,7 +80,9 @@ func (db *DB) Migrate() error {
 		published_at DATETIME NOT NULL,
 		is_starred BOOLEAN DEFAULT 0,
 		is_read BOOLEAN DEFAULT 0,
-		created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+		created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+		fetch_day TEXT DEFAULT '',
+		fetch_time TEXT DEFAULT ''
 	);
 
 	CREATE TABLE IF NOT EXISTS system_logs (
@@ -92,6 +97,17 @@ func (db *DB) Migrate() error {
 	);
 	`
 	_, err := db.SqlDB.Exec(query)
+	if err != nil {
+		return err
+	}
+	// Migration: add fetch_day/fetch_time columns if they don't exist yet (for existing DBs)
+	_ = db.addColumnIfNotExists("papers", "fetch_day", "TEXT DEFAULT ''")
+	_ = db.addColumnIfNotExists("papers", "fetch_time", "TEXT DEFAULT ''")
+	return nil
+}
+
+func (db *DB) addColumnIfNotExists(table, column, definition string) error {
+	_, err := db.SqlDB.Exec(fmt.Sprintf("ALTER TABLE %s ADD COLUMN %s %s", table, column, definition))
 	return err
 }
 
@@ -104,9 +120,15 @@ func (db *DB) LogEvent(event string) {
 }
 
 func (db *DB) SavePaper(p *Paper, tagsJSON string) error {
+	// Capture WIB (UTC+7) day and time at moment of fetch
+	wib := time.FixedZone("WIB", 7*3600)
+	now := time.Now().In(wib)
+	fetchDay := now.Weekday().String()   // e.g. "Monday"
+	fetchTime := now.Format("15:04:05") // HH:MM:SS
+
 	query := `
-	INSERT INTO papers (id, title, authors, summary_raw, summary_ai, relevance_score, tags, pdf_url, published_at)
-	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+	INSERT INTO papers (id, title, authors, summary_raw, summary_ai, relevance_score, tags, pdf_url, published_at, fetch_day, fetch_time)
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 	ON CONFLICT(id) DO UPDATE SET
 		title=excluded.title,
 		authors=excluded.authors,
@@ -115,9 +137,11 @@ func (db *DB) SavePaper(p *Paper, tagsJSON string) error {
 		relevance_score=excluded.relevance_score,
 		tags=excluded.tags,
 		pdf_url=excluded.pdf_url,
-		published_at=excluded.published_at;
+		published_at=excluded.published_at,
+		fetch_day=excluded.fetch_day,
+		fetch_time=excluded.fetch_time;
 	`
-	_, err := db.SqlDB.Exec(query, p.ID, p.Title, p.Authors, p.SummaryRaw, p.SummaryAI, p.RelevanceScore, tagsJSON, p.PdfURL, p.PublishedAt)
+	_, err := db.SqlDB.Exec(query, p.ID, p.Title, p.Authors, p.SummaryRaw, p.SummaryAI, p.RelevanceScore, tagsJSON, p.PdfURL, p.PublishedAt, fetchDay, fetchTime)
 	return err
 }
 
@@ -150,7 +174,7 @@ func (db *DB) GetPapers(page, limit int, search string, starredOnly bool, minSco
 	}
 
 	query := fmt.Sprintf(`
-		SELECT id, title, authors, summary_raw, COALESCE(summary_ai, ''), relevance_score, COALESCE(tags, '[]'), pdf_url, published_at, is_starred, is_read, created_at
+		SELECT id, title, authors, summary_raw, COALESCE(summary_ai, ''), relevance_score, COALESCE(tags, '[]'), pdf_url, published_at, is_starred, is_read, created_at, COALESCE(fetch_day,''), COALESCE(fetch_time,'')
 		FROM papers
 		%s
 		ORDER BY published_at DESC, created_at DESC
@@ -168,7 +192,7 @@ func (db *DB) GetPapers(page, limit int, search string, starredOnly bool, minSco
 	for rows.Next() {
 		var p Paper
 		var tagsStr string
-		err := rows.Scan(&p.ID, &p.Title, &p.Authors, &p.SummaryRaw, &p.SummaryAI, &p.RelevanceScore, &tagsStr, &p.PdfURL, &p.PublishedAt, &p.IsStarred, &p.IsRead, &p.CreatedAt)
+		err := rows.Scan(&p.ID, &p.Title, &p.Authors, &p.SummaryRaw, &p.SummaryAI, &p.RelevanceScore, &tagsStr, &p.PdfURL, &p.PublishedAt, &p.IsStarred, &p.IsRead, &p.CreatedAt, &p.FetchDay, &p.FetchTime)
 		if err != nil {
 			return nil, 0, err
 		}
@@ -181,12 +205,12 @@ func (db *DB) GetPapers(page, limit int, search string, starredOnly bool, minSco
 
 func (db *DB) GetPaperByID(id string) (*Paper, error) {
 	query := `
-		SELECT id, title, authors, summary_raw, COALESCE(summary_ai, ''), relevance_score, COALESCE(tags, '[]'), pdf_url, published_at, is_starred, is_read, created_at
+		SELECT id, title, authors, summary_raw, COALESCE(summary_ai, ''), relevance_score, COALESCE(tags, '[]'), pdf_url, published_at, is_starred, is_read, created_at, COALESCE(fetch_day,''), COALESCE(fetch_time,'')
 		FROM papers WHERE id = ?
 	`
 	var p Paper
 	var tagsStr string
-	err := db.SqlDB.QueryRow(query, id).Scan(&p.ID, &p.Title, &p.Authors, &p.SummaryRaw, &p.SummaryAI, &p.RelevanceScore, &tagsStr, &p.PdfURL, &p.PublishedAt, &p.IsStarred, &p.IsRead, &p.CreatedAt)
+	err := db.SqlDB.QueryRow(query, id).Scan(&p.ID, &p.Title, &p.Authors, &p.SummaryRaw, &p.SummaryAI, &p.RelevanceScore, &tagsStr, &p.PdfURL, &p.PublishedAt, &p.IsStarred, &p.IsRead, &p.CreatedAt, &p.FetchDay, &p.FetchTime)
 	if err != nil {
 		return nil, err
 	}

@@ -23,7 +23,7 @@ func main() {
 	dbPath := getEnv("DB_PATH", "/data/radar.db")
 	mqttBroker := getEnv("MQTT_BROKER", "broker:1883")
 	mlServiceURL := getEnv("ML_SERVICE_URL", "http://ml-service:5000/summarize")
-	defaultKeywords := getEnv("DEFAULT_KEYWORDS", "swarm robotics, decentralized control, drone vtol")
+	defaultKeywords := getEnv("DEFAULT_KEYWORDS", "swarm UAV formation control, artificial potential field, decentralized multi-agent, event-based control quadcopter, swarm robotics obstacle avoidance")
 	cronInterval := getEnv("ARXIV_FETCH_INTERVAL", "@every 6h")
 	port := getEnv("PORT", "8080")
 

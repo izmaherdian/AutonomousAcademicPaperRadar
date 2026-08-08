@@ -172,7 +172,7 @@ func (h *Handler) TriggerFetch(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewDecoder(r.Body).Decode(&body)
 
 	if body.Keywords == "" {
-		body.Keywords = h.DB.GetSetting("keywords", "swarm robotics, decentralized control, drone vtol")
+		body.Keywords = h.DB.GetSetting("keywords", "swarm UAV formation control, artificial potential field, decentralized multi-agent, event-based control quadcopter, swarm robotics obstacle avoidance")
 	}
 
 	h.WSHub.Broadcast("FETCH_STARTED", map[string]string{"keywords": body.Keywords})

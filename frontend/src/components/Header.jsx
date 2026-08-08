@@ -1,92 +1,77 @@
 import React from 'react';
-import { Radar, RefreshCw, Cpu, Tag, Sparkles, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { Radar, RefreshCw, Cpu, CheckCircle2, AlertTriangle } from 'lucide-react';
 
 export default function Header({
   isConnected,
   isFetching,
   onTriggerFetch,
-  onOpenKeywordsModal,
   onToggleESP32Widget,
   showESP32Widget
 }) {
   return (
-    <header className="sticky top-0 z-40 w-full glass-panel border-b border-slate-800/80 bg-[#070a11]/85 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto px-4 lg:px-8 h-20 flex items-center justify-between">
-        
+    <header className="sticky top-0 z-40 w-full glass-panel border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
+      <div className="max-w-7xl mx-auto px-4 lg:px-8 h-16 flex items-center justify-between">
+
         {/* Brand Logo & Title */}
-        <div className="flex items-center space-x-3.5">
-          <div className="relative flex items-center justify-center w-11 h-11 rounded-2xl bg-gradient-to-tr from-cyan-600 to-indigo-600 p-[1px] shadow-lg shadow-cyan-500/20">
-            <div className="w-full h-full bg-[#0b0f19] rounded-[15px] flex items-center justify-center">
-              <Radar className="w-6 h-6 text-cyan-400 animate-spin-slow" />
-            </div>
-            <span className="absolute -top-1 -right-1 flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+        <div className="flex items-center space-x-3">
+          <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-500 to-emerald-500 shadow-sm">
+            <Radar className="w-5 h-5 text-white animate-spin-slow" />
+            <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
             </span>
           </div>
 
           <div>
-            <div className="flex items-center space-x-2">
-              <h1 className="text-lg font-extrabold tracking-tight text-white font-sans">
-                Academic Paper <span className="bg-gradient-to-r from-cyan-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent">Radar</span>
-              </h1>
-              <span className="px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 rounded-full">
-                AI Powered
+            <h1 className="text-base font-extrabold tracking-tight text-slate-800">
+              Academic Paper{' '}
+              <span className="bg-gradient-to-r from-blue-600 to-emerald-500 bg-clip-text text-transparent">
+                Radar
               </span>
-            </div>
-            <p className="text-xs text-slate-400 hidden sm:block">
-              Autonomous arXiv Scraper & Gemini AI Summarization Assistant
+            </h1>
+            <p className="text-[11px] text-slate-400 hidden sm:block leading-none mt-0.5">
+              Autonomous arXiv Monitor · Swarm UAV Research
             </p>
           </div>
         </div>
 
         {/* Right Action Tools */}
-        <div className="flex items-center space-x-3">
-          
-          {/* Live WS Connection Status Badge */}
-          <div className={`hidden md:flex items-center space-x-2 px-3 py-1.5 rounded-full text-xs font-medium border ${
+        <div className="flex items-center space-x-2.5">
+
+          {/* Live WS Connection Status */}
+          <div className={`hidden md:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium border ${
             isConnected
-              ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-              : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+              ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+              : 'bg-amber-50 text-amber-700 border-amber-200'
           }`}>
-            <span className={`w-2 h-2 rounded-full ${isConnected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
-            <span>{isConnected ? 'Live Connected' : 'Reconnecting...'}</span>
+            <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+            <span>{isConnected ? 'Live' : 'Reconnecting...'}</span>
           </div>
 
-          {/* Manage Keywords Button */}
-          <button
-            onClick={onOpenKeywordsModal}
-            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white border border-slate-700/60 text-xs font-semibold transition-all shadow-sm"
-            title="Configure arXiv search keywords"
-          >
-            <Tag className="w-4 h-4 text-cyan-400" />
-            <span className="hidden sm:inline">Keywords</span>
-          </button>
-
-          {/* ESP32 Virtual Widget Toggle Button */}
+          {/* ESP32 Virtual Widget Toggle */}
           <button
             onClick={onToggleESP32Widget}
-            className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-xl border text-xs font-semibold transition-all ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${
               showESP32Widget
-                ? 'bg-indigo-600 text-white border-indigo-500 shadow-lg shadow-indigo-500/20'
-                : 'bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 border-slate-700/60'
+                ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
             }`}
             title="Toggle Virtual ESP32 Hardware Widget"
           >
-            <Cpu className="w-4 h-4 text-indigo-400" />
-            <span className="hidden sm:inline">ESP32 Widget</span>
+            <Cpu className={`w-3.5 h-3.5 ${showESP32Widget ? 'text-white' : 'text-indigo-500'}`} />
+            <span className="hidden sm:inline">ESP32</span>
           </button>
 
           {/* Trigger Fetch Button */}
           <button
             onClick={onTriggerFetch}
             disabled={isFetching}
-            className="flex items-center space-x-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold text-xs transition-all shadow-lg shadow-cyan-500/25 active:scale-95 disabled:opacity-50"
+            id="trigger-fetch-btn"
+            className="flex items-center space-x-2 px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-all shadow-sm shadow-blue-600/20 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
-            <span>{isFetching ? 'Fetching...' : 'Trigger Fetch'}</span>
+            <RefreshCw className={`w-3.5 h-3.5 ${isFetching ? 'animate-spin' : ''}`} />
+            <span>{isFetching ? 'Fetching...' : 'Fetch Papers'}</span>
           </button>
-
         </div>
       </div>
     </header>
