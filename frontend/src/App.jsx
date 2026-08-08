@@ -4,6 +4,7 @@ import StatsOverview from './components/StatsOverview';
 import FilterBar from './components/FilterBar';
 import PaperCard from './components/PaperCard';
 import VirtualESP32Widget from './components/VirtualESP32Widget';
+import SquarespaceLanding from './components/SquarespaceLanding';
 import {
   fetchPapers,
   toggleStarPaper,
@@ -12,9 +13,10 @@ import {
   fetchStats,
 } from './services/api';
 import { wsClient } from './services/websocket';
-import { Radar, ChevronLeft, ChevronRight, Inbox, RefreshCw } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Inbox, RefreshCw } from 'lucide-react';
 
 export default function App() {
+  const [activeView, setActiveView]                 = useState('dashboard'); // 'dashboard' | 'landing'
   const [papers, setPapers]                         = useState([]);
   const [stats, setStats]                           = useState({});
   const [search, setSearch]                         = useState('');
@@ -56,13 +58,10 @@ export default function App() {
   useEffect(() => { loadStats(); }, [loadStats]);
 
   // ── WebSocket Listeners ─────────────────────────────────────────────────
-  // Connect ONCE on mount — never reconnect from this effect
   useEffect(() => {
     wsClient.connect();
-    return () => {
-      // Cleanup on unmount — prevent memory leak
-    };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    return () => {};
+  }, []);
 
   useEffect(() => {
     const unsubs = [
@@ -71,7 +70,6 @@ export default function App() {
       wsClient.on('NEW_PAPER', (paper) => {
         loadPapers();
         loadStats();
-        // Alert for high-relevance papers (threshold: 70 to match backend)
         if (paper.relevance_score >= 70) {
           setLatestHighRelevancePaper({
             id: paper.id,
@@ -136,8 +134,13 @@ export default function App() {
 
   const totalPages = Math.ceil(total / 20) || 1;
 
+  // Render Landing Page mode if activeView === 'landing'
+  if (activeView === 'landing') {
+    return <SquarespaceLanding onLaunchApp={() => setActiveView('dashboard')} />;
+  }
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#fcfbf9] text-slate-800 flex flex-col font-sans selection:bg-slate-900 selection:text-white">
 
       {/* Header */}
       <Header
@@ -146,6 +149,8 @@ export default function App() {
         onTriggerFetch={handleTriggerFetch}
         onToggleESP32Widget={() => setShowESP32Widget(!showESP32Widget)}
         showESP32Widget={showESP32Widget}
+        activeView={activeView}
+        onSwitchView={setActiveView}
       />
 
       {/* Main */}
@@ -179,15 +184,15 @@ export default function App() {
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-bold text-slate-500 tracking-wide uppercase flex items-center space-x-2">
               <span>Discovered Papers</span>
-              <span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-xs font-mono border border-blue-100">
+              <span className="px-2 py-0.5 rounded-full bg-slate-900 text-white text-xs font-mono">
                 {total}
               </span>
             </h2>
 
             {isFetching && (
-              <div className="flex items-center space-x-2 text-blue-500 text-xs">
+              <div className="flex items-center space-x-2 text-indigo-600 text-xs font-medium">
                 <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                <span>Scraping arXiv & processing...</span>
+                <span>Scraping arXiv & evaluating Gemini AI...</span>
               </div>
             )}
           </div>
@@ -196,7 +201,7 @@ export default function App() {
           {isLoading ? (
             <div className="space-y-3">
               {[1, 2, 3].map((n) => (
-                <div key={n} className="glass-card p-5 rounded-xl animate-pulse space-y-3">
+                <div key={n} className="glass-card p-5 rounded-2xl animate-pulse space-y-3">
                   <div className="h-3 bg-slate-200 rounded w-1/4"></div>
                   <div className="h-5 bg-slate-200 rounded w-3/4"></div>
                   <div className="h-16 bg-slate-100 rounded w-full"></div>
@@ -214,17 +219,17 @@ export default function App() {
             ))
           ) : (
             /* Empty state */
-            <div className="glass-panel p-12 rounded-xl text-center flex flex-col items-center justify-center border border-slate-200/80">
+            <div className="glass-panel p-12 rounded-2xl text-center flex flex-col items-center justify-center border border-slate-200/80">
               <div className="p-4 rounded-2xl bg-slate-100 text-slate-400 mb-3">
-                <Inbox className="w-8 h-8 text-blue-400" />
+                <Inbox className="w-8 h-8 text-slate-600" />
               </div>
-              <h3 className="text-base font-bold text-slate-700 mb-1">Belum Ada Paper</h3>
-              <p className="text-sm text-slate-400 max-w-sm mb-4">
+              <h3 className="text-base font-bold text-slate-800 mb-1 font-serif-header text-xl">Belum Ada Paper</h3>
+              <p className="text-sm text-slate-500 max-w-sm mb-4 font-light leading-relaxed">
                 Klik tombol <strong>Fetch Papers</strong> untuk mengambil paper terbaru dari arXiv sesuai topik penelitian Anda.
               </p>
               <button
                 onClick={handleTriggerFetch}
-                className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-sm transition-all"
+                className="px-5 py-2.5 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm shadow-xs transition-all"
               >
                 Fetch Papers Sekarang
               </button>
@@ -235,22 +240,22 @@ export default function App() {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex items-center justify-between mt-6 pt-4 border-t border-slate-200">
-            <span className="text-xs text-slate-400">
-              Halaman <strong className="text-slate-600 font-mono">{page}</strong> dari{' '}
-              <strong className="text-slate-600 font-mono">{totalPages}</strong>
+            <span className="text-xs text-slate-400 font-mono">
+              Halaman <strong className="text-slate-700">{page}</strong> dari{' '}
+              <strong className="text-slate-700">{totalPages}</strong>
             </span>
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="p-2 rounded-lg bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 disabled:opacity-40 transition-colors"
+                className="p-2 rounded-xl bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 disabled:opacity-40 transition-colors"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
-                className="p-2 rounded-lg bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 disabled:opacity-40 transition-colors"
+                className="p-2 rounded-xl bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 disabled:opacity-40 transition-colors"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -260,8 +265,8 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full border-t border-slate-200 py-4 mt-8 text-center text-xs text-slate-400">
-        Academic Paper Radar &copy; 2026 &bull; Go Backend &bull; Python ML Service &bull; ESP32 MQTT &bull; NGINX Docker
+      <footer className="w-full border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-400 font-mono">
+        Academic Paper Radar &copy; 2026 &bull; Go Backend &bull; Python Gemini ML &bull; ESP32 MQTT &bull; NGINX Docker
       </footer>
     </div>
   );

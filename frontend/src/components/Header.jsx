@@ -1,20 +1,26 @@
 import React from 'react';
-import { Radar, RefreshCw, Cpu } from 'lucide-react';
+import { Radar, RefreshCw, Cpu, Layout } from 'lucide-react';
 
 export default function Header({
   isConnected,
   isFetching,
   onTriggerFetch,
   onToggleESP32Widget,
-  showESP32Widget
+  showESP32Widget,
+  activeView,
+  onSwitchView
 }) {
   return (
     <header className="sticky top-0 z-40 w-full glass-panel border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 lg:px-8 h-16 flex items-center justify-between">
 
-        {/* Brand Logo & Title */}
-        <div className="flex items-center space-x-3">
-          <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-emerald-500 shadow-2xs">
+        {/* Brand Logo & Title — Click to switch view */}
+        <div
+          onClick={() => onSwitchView(activeView === 'landing' ? 'dashboard' : 'landing')}
+          className="flex items-center space-x-3 cursor-pointer group"
+          title="Switch between Dashboard and Landing Showcase"
+        >
+          <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-slate-900 to-indigo-600 shadow-2xs group-hover:scale-105 transition-transform">
             <Radar className="w-5 h-5 text-white animate-spin-slow" />
             <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span>
@@ -23,10 +29,10 @@ export default function Header({
           </div>
 
           <div>
-            <h1 className="text-base font-extrabold tracking-tight text-slate-800">
-              Academic Paper{' '}
-              <span className="bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent">
-                Radar
+            <h1 className="text-base font-extrabold tracking-tight text-slate-800 flex items-center space-x-2">
+              <span className="font-serif-header text-lg">Academic Radar</span>
+              <span className="bg-gradient-to-r from-indigo-600 to-emerald-600 bg-clip-text text-transparent font-sans text-xs font-bold uppercase tracking-wider">
+                {activeView === 'landing' ? 'Showcase' : 'Dashboard'}
               </span>
             </h1>
             <p className="text-[11px] text-slate-400 hidden sm:block leading-none mt-0.5">
@@ -37,6 +43,16 @@ export default function Header({
 
         {/* Action Tools */}
         <div className="flex items-center space-x-2.5">
+
+          {/* Switch View Button */}
+          <button
+            onClick={() => onSwitchView(activeView === 'landing' ? 'dashboard' : 'landing')}
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-semibold transition-all"
+            title="Toggle Squarespace Showcase Landing Page"
+          >
+            <Layout className="w-3.5 h-3.5 text-indigo-600" />
+            <span className="hidden sm:inline">{activeView === 'landing' ? 'Go to Dashboard' : 'View Landing Page'}</span>
+          </button>
 
           {/* Live WS Status */}
           <div className={`hidden md:flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-medium border ${
@@ -67,7 +83,7 @@ export default function Header({
             onClick={onTriggerFetch}
             disabled={isFetching}
             id="trigger-fetch-btn"
-            className="flex items-center space-x-2 px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition-all shadow-2xs active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex items-center space-x-2 px-4 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition-all shadow-2xs active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isFetching ? 'animate-spin' : ''}`} />
             <span>{isFetching ? 'Fetching...' : 'Fetch Papers'}</span>
